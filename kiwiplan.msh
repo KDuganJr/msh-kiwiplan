@@ -194,14 +194,14 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home
 # Java Navigation {{{
 
 export JPJ_ROOT=~/projects
-#export JPJ=mes-excl-8.10
-export JPJ=mes-excl-8.14
+export JPJ=all-8.10
 export JPD=$(lnode $JPJ - 1)
 MERGEREV=("mes-8.10" "mes-8.10.1") export MERGEREV
 export JREV=$(e $JPJ | cut -c5-)
 export JHD=mes-8.0
 export JMB=mes-8.0
-export SITE_NAME=$(echo $JPJ | sed "s/[-,\.]/_/g")
+export JSV=mes-8.10
+export SITE_NAME=$JSV
 export VDS=$CDS/VUE
 export REBEL_HOME=~/.IdeaIC11/config/plugins/jr-ide-idea/lib/jrebel
 export SV=/kiwi/java/sites
@@ -431,7 +431,7 @@ jsv() {
   sps
   vue
   menu 'svn ls $SVN/projects | gv master | g '$1' | sed "s/\///"'
-  crc JPJ $menu
+  crc JSV $menu
   if ! sv; then
     jin
   fi
@@ -461,7 +461,7 @@ jup() {
   jid
 
 # Run installation
-  ./$JPJ-*.sh << EOF
+  ./$JSV-*.sh << EOF
 
 $SITE_NAME
 
@@ -473,17 +473,17 @@ EOF
 }
 
 jid() {
-  d $IN/$JPJ
-  rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JPJ | sed "s/-[^-]*$//")/ . $JPJ'-*'
+  d $IN/$JSV
+  rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JSV | sed "s/-[^-]*$//")/ . $JSV'-*'
   cplic $JPD
 }
 
 jwid() {
-  d $IN/$JPJ
+  d $IN/$JSV
   if [[ -d windows ]]; then
     rm -rf windows
   fi
-  scp -r 'installers@nzjenkins:/home/installers/latest/'$JPJ windows
+  scp -r 'installers@nzjenkins:/home/installers/latest/'$JSV windows
 }
 
 # Import SQL script to database
@@ -549,7 +549,7 @@ n
 ### Completed
 # Configure
 e
-" | gv "#" | ./$JPJ-*.sh
+" | gv "#" | ./$JSV-*.sh
 }
 
 jintss() {
@@ -598,7 +598,7 @@ n
 ### Completed
 # Configure
 e
-" | gv "#" | ./$JPJ-*.sh
+" | gv "#" | ./$JSV-*.sh
 
 
 
