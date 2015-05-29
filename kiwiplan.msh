@@ -200,23 +200,24 @@ MERGEREV=("mes-8.10" "mes-8.10.1") export MERGEREV
 export JREV=$(e $JPJ | cut -c5-)
 export JHD=mes-8.0
 export JMB=mes-8.0
+export JSV_ROOT=/kiwi/java/sites
 export JSV=mes-8.10
 export SITE_NAME=$JSV
 export VDS=$CDS/VUE
 export REBEL_HOME=~/.IdeaIC11/config/plugins/jr-ide-idea/lib/jrebel
-export SV=/kiwi/java/sites
-export CM=/kiwi/java/comms
-export TC=/kiwi/java/tomcat
-export WK=/kiwi/java/work
+export CM_ROOT=/kiwi/java/comms
+export TC_ROOT=/kiwi/java/tomcat
+export WK_ROOT=/kiwi/java/work
 export IN=~/installers
 export JSVN="svn+ssh://corona2/svn/mapjava"
 if [[ $MODE == "VUE" ]]; then
   export SQL_PREFIX=${SITE_NAME}_
-  export SVN=$JSVN
   export PJ_ROOT=$JPJ_ROOT
   export PJ=$JPJ
   export HD=$JHD
   export MB=$JMB
+	export SV_ROOT=$JSV_ROOT
+  export SV=$JSV
   export SVN=$JSVN
 fi
 
@@ -224,20 +225,20 @@ alias vue="mode <<< 1"
 
 # Go to java service directory
 sv() {
-  o $SV
-  if [[ ! -d $SITE_NAME ]]; then
+  o $SV_ROOT
+  if [[ ! -d $SV ]]; then
     wtt "sv not found"
     return 1
   fi
-  o $SITE_NAME
+  o $SV
   o current
   wtt sv
 } 
 
 # Go to java service logs directory
 svl() {
+  o $SV_ROOT
   o $SV
-  o $SITE_NAME
   o current
   o logs
   wtt svl
@@ -245,19 +246,17 @@ svl() {
 
 # Go to java tomcat directory
 tc() {
-  o $TC/$SITE_NAME/current
+  o $TC_ROOT/$SV/current
 }
 
 # Go to java comms directory
 cm() {
-  cd $CM
-  cd $SITE_NAME
+  o $CM_ROOT/$SV
 }
 
 # Go to java work directory
 wk() {
-  cd $WK
-  cd $SITE_NAME
+  o $WK_ROOT/$SV
 }
 
 sss() {
@@ -278,7 +277,7 @@ ssse() {
 sts() {
   pwd=$(pwd)
   mwk
-  evn $SV/$SITE_NAME/current/bin/startservers.sh
+  evn $SV_ROOT/$SV/current/bin/startservers.sh
   o $pwd
 }
 
@@ -329,9 +328,9 @@ jind() {
 
 # rmsite : Removes current java revision installation
 rmsite() {
-  rm -rf $SV/$SITE_NAME
-  rm -rf $WK/$SITE_NAME
-  rm -rf $TC/$SITE_NAME
+  rm -rf $SV_ROOT/$SV
+  rm -rf $WK_ROOT/$SV
+  rm -rf $TC_ROOT/$SV
 	rmsitedb
 }
 rmsitedb() {
@@ -367,8 +366,8 @@ dbt() {
 
 # Edit java fix time
 fixtime() {
-  vi $SV/$SITE_NAME/current/conf/kiwiplan/time.properties;
-  cp $SV/$SITE_NAME/current/conf/kiwiplan/time.properties $TC/$SITE_NAME/current/kiwiconf/kiwiplan/time.properties;
+  vi $SV_ROOT/$SV/current/conf/kiwiplan/time.properties;
+  cp $SV_ROOT/$SV/current/conf/kiwiplan/time.properties $TC_ROOT/$SV/current/kiwiconf/kiwiplan/time.properties;
 }
 
 # View latest java comms response
@@ -395,7 +394,7 @@ cmp() {
 # Java Debug: Debug Java service
 # jdb : Pick Java Service to debug
 jdb() {
-  pn jdb "ls $SV/$SITE_NAME/current/conf/kiwiplan/jini/*.xml"
+  pn jdb "ls $SV_ROOT/$SV/current/conf/kiwiplan/jini/*.xml"
 }
 
 # Java Setup: Check out Java project
@@ -440,7 +439,7 @@ jsv() {
 }
 
 jstss() {
-	cp $COMMON/roadgrids/* $SV/$SITE_NAME/current/conf/kiwiplan/roadgrids
+	cp $COMMON/roadgrids/* $SV_ROOT/$SV/current/conf/kiwiplan/roadgrids
   tc
   d webapps/kp-tss-map-tiles/maptiles
   sudo mount nzmaptiles.kiwiplan.co.nz:/data/default  .
@@ -501,8 +500,8 @@ jdr() {
 	vds
   sqli $1
   if [[ -f time.properties ]]; then
-    cp time.properties $SV/$SITE_NAME/current/conf/kiwiplan/time.properties
-    cp $SV/$SITE_NAME/current/conf/kiwiplan/time.properties $TC/$SITE_NAME/current/kiwiconf/kiwiplan/time.properties
+    cp time.properties $SV_ROOT/$SV/current/conf/kiwiplan/time.properties
+    cp $SV_ROOT/$SV/current/conf/kiwiplan/time.properties $TC_ROOT/$SV/current/kiwiconf/kiwiplan/time.properties
 	fi
 }
 
