@@ -223,18 +223,6 @@ fi
 
 alias vue="mode <<< 1"
 
-# Go to java service directory
-sv() {
-  o $SV_ROOT
-  if [[ ! -d $SV ]]; then
-    wtt "sv not found"
-    return 1
-  fi
-  o $SV
-  o current
-  wtt sv
-} 
-
 # Go to java service logs directory
 svl() {
   o $SV_ROOT
@@ -293,19 +281,11 @@ dps() {
 
 # Start/Stop java services
 ss() {
-  if [[ $MODE == "SCD" ]]; then
-    pj
-    o src
-		wt ss
-		nodemon server.js
-		wt
-  else
-    sss=$(decolor <<< $(sss))
-    case $sss in
-      DOWN) sts;;
-      *) sps; sts;;
-    esac
-  fi
+	sss=$(decolor <<< $(sss))
+	case $sss in
+		DOWN) sts;;
+		*) sps; sts;;
+	esac
 }
 
 # Start Scheduler
