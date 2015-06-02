@@ -3,12 +3,18 @@
 # Mount MAP rev with sshfs
 # }}}
 
+#### Mode Trap {{{
+if [[ $MODE != "MAP" && $MODE != "VUE" ]]; then
+	return
+fi
+# }}}
+
 #### General Developement {{{
 
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Tailim/Paju
+export CDS=/KIWI/datasets/GP/Kansas
 
 # }}}
 
