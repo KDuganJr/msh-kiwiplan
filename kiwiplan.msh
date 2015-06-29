@@ -31,10 +31,13 @@ uds() {
 	fi
 	dspath=$DS/Kall/$dsname
 
-	wtl Unloading $1 to $dsname
+	wtl "Unloading $1 to $dsname"
 	
 	pushd .
 
+	if [[ -d $dspath ]]; then
+		r $dspath
+	fi
 	md $dspath
 	cp $1 $dspath
 	d $dspath
