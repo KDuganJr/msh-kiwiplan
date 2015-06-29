@@ -23,11 +23,19 @@ export CDS=/KIWI/datasets/Unload/fstar.missingunits.dump.tar
 # Data Set : Unload Data Set
 # uds a.dump.tar : Unload a.dump.tar and change to that dataset
 uds() {
+
+	if [[ $2 != "" ]];
+		dsname=$2
+	else
+		dsname=$1
+	fi
+	dspath=$DS/Kall/$dsname
+
 	pushd .
 
-	md $DS/Unload/$1
-	cp $1 $DS/Unload/$1
-	d $DS/Unload/$1
+	md $dspath
+	cp $1 $dspath
+	d $dspath
 	uz $1
 	uz *
 
@@ -43,6 +51,7 @@ uds() {
 	d MAP
 	m * "*.tar"
 	uz *
+	mapprofile
 	d ..
 
 # SQL
@@ -890,6 +899,10 @@ maprev() {
     upmap
   fi
   ln -s /kiwi/revisions/kiwi_$menu /kiwi/kiwilink
+}
+
+mapprofile() {
+	echo TERMINAL:vt100 > PROFILE
 }
 
 # Change MAP rev for dataset restores
