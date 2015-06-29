@@ -14,11 +14,48 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Fivestar/5664346
+export CDS=/KIWI/datasets/Unload/fstar.missingunits.dump.tar
 
 # }}}
 
 # Data Set {{{
+
+# Data Set : Unload Data Set
+# uds a.dump.tar : Unload a.dump.tar and change to that dataset
+uds() {
+	pushd .
+
+	md $DS/Unload/$1
+	cp $1 $DS/Unload/$1
+	d $DS/Unload/$1
+	uz $1
+	uz *
+
+# Logs
+	mmd *logs* LOGS
+	d LOGS
+	m * "*.tar"
+	uz *
+	d ..
+
+# MAP
+	mmd *classic* MAP
+	d MAP
+	m * "*.tar"
+	uz *
+	d ..
+
+# SQL
+	mmd *.dump VUE
+	d VUE
+	mtp * "$SQL_PREFIX$(lnode $f . 2).sql"
+	mtp *man* "$(echo $f | sr man mapman)"
+	d ..
+
+	cds
+
+	popd
+}
 
 # Data Set: Change Data Set
 # cds : Change data set
@@ -59,8 +96,6 @@ mds() {
 vds() {
   o $CDS/VUE
 }
-
-
 
 # }}}
 
