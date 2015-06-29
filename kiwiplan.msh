@@ -24,13 +24,15 @@ export CDS=/KIWI/datasets/Unload/fstar.missingunits.dump.tar
 # uds a.dump.tar : Unload a.dump.tar and change to that dataset
 uds() {
 
-	if [[ $2 != "" ]];
+	if [[ $2 != "" ]]; then
 		dsname=$2
 	else
 		dsname=$1
 	fi
 	dspath=$DS/Kall/$dsname
 
+	wtl Unloading $1 to $dsname
+	
 	pushd .
 
 	md $dspath
@@ -61,6 +63,7 @@ uds() {
 	mtp *man* "$(echo $f | sr man mapman)"
 	d ..
 
+	wtu
 	cds
 
 	popd
