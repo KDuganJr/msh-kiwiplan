@@ -62,8 +62,8 @@ uds() {
 # SQL
 	mmd *.dump VUE
 	d VUE
-	mtp * "$SQL_PREFIX$(lnode $f . 2).sql"
-	mtp *man* "$(echo $f | sr man mapman)"
+	mtp * '$SQL_PREFIX$(lnode $f . 2).sql'
+	mtp *man* '$(echo $f | sr man mapman)'
 	d ..
 
 	wtu
