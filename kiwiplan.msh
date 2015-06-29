@@ -116,11 +116,9 @@ boomdl() {
 	rmu 'nzboom:~/shared/*' .
 }
 
-#TODO Doesn't work
 gromblecollect() {
-  cdd gromble
-  rm -rf *
-  scp -r 'gromble:~/support/nzcollect/$1' .
+  dc gromble
+  scp -r gromble:/support/support/nzcollect/$1 .
 }
 
 gromble() {
@@ -195,7 +193,7 @@ demo() {
 
 #### Java Development {{{
 
-export JAVA_HOME=/usr/lib/jvm/java-7-oracle
+export JAVA_HOME=/usr/lib/jvm/java-6-oracle
 
 # Java Navigation {{{
 
