@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Unload/fstar.missingunits.dump.tar
+export CDS=/KIWI/datasets/Kall/fstar.splitship.dump.tar
 
 # }}}
 
