@@ -243,7 +243,7 @@ demo() {
 
 #### Java Development {{{
 
-export JAVA_HOME=/usr/lib/jvm/java-6-oracle
+export JAVA_HOME=/usr/lib/jvm/java-7-oracle
 
 # Java Navigation {{{
 
@@ -500,7 +500,7 @@ jup() {
   jid
 
 # Run installation
-  ./$JSV-*.sh << EOF
+  ./$JIN-*.sh << EOF
 
 $SITE_NAME
 
@@ -694,16 +694,6 @@ jdpa() {
 	pwd=$(pwd)
 	jats
   modified_projects=("${(@f)$(find . -maxdepth 3 -name "src" | grep -v conf | sed 's/src$//' | cut -c 3- | sort | uniq)}")
-	e
-	e Projects modified:
-	e
-	for project in $modified_projects; do
-		echo "* $project"
-	done
-	e
-	e ENTER to proceed, C-c to cancel
-	e
-	read
 	for project in $modified_projects; do
 		d $pwd
 		cd $project
