@@ -700,6 +700,7 @@ jdpa() {
 		cd $project
 		dp
 	done
+	ss
 }
 
 jja() {
