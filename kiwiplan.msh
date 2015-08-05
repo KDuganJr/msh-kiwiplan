@@ -688,6 +688,7 @@ jdp() {
 		cd $project
 		dp
 	done
+	ss
 }
 
 jdpa() {
