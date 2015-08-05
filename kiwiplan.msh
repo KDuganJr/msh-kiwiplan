@@ -63,7 +63,7 @@ uds() {
 	mmd *.dump VUE
 	d VUE
 	mtp * '$SQL_PREFIX$(lnode $f . 2).sql'
-	mtp *man* '$(echo $f | sr man mapman)'
+	mtp *man* '$(echo $f | ts man mapman)'
 	d ..
 
 	wtu
@@ -392,7 +392,7 @@ lg() {
 # Java Development: Log Error
 # lge : Tail logs and monitor for errors
 lge() {
-  lg | g Exception
+  lg | s Exception
 }
 
 # Start tomcat debug
@@ -451,7 +451,7 @@ EOF
 
 jpj() {
   vue
-  menu 'svn ls $SVN/projects | gv master | g '$1' | sed "s/\///"'
+  menu 'svn ls $SVN/projects | si master | s '$1' | sed "s/\///"'
   crc JPJ $menu kiwiplan
   if [[ -d $PJ_ROOT/$PJ ]]; then
     pj
@@ -469,7 +469,7 @@ cplic() {
 jsv() {
   sps
   vue
-  menu 'svn ls $SVN/projects | gv master | g '$1' | sed "s/\///"'
+  menu 'svn ls $SVN/projects | si master | s '$1' | sed "s/\///"'
   crc JSV $menu kiwiplan
   if ! sv; then
     jin
@@ -489,7 +489,7 @@ jtst() {
 	if [[ $1 == "" ]]; then
 		maven build-all || cat target/test-reports/*.txt
 	else
-		testclass=$(find testsrc -name "$1.java" | cut -d "." -f1 | s 's/^testsrc\///g')
+		testclass=$(find testsrc -name "$1.java" | cut -d "." -f1 | sed 's/^testsrc\///g')
 		mvn test -Dtest=$testclass
 	fi
 }
@@ -588,7 +588,7 @@ n
 ### Completed
 # Configure
 e
-" | gv "#" | ./$JSV-*.sh
+" | si "#" | ./$JSV-*.sh
 }
 
 jintss() {
@@ -638,7 +638,7 @@ n
 ### Completed
 # Configure
 e
-" | gv "#" | ./$JSV-*.sh
+" | si "#" | ./$JSV-*.sh
 
 
 
@@ -667,7 +667,7 @@ jin() {
 # jdt : Turn on debug for trim
 jdt() {
   sv
-  cat $COMMON/haoyang/trim.log | s "s/SITE_NAME/$SITE_NAME/" >> conf/log4j.properties
+  cat $COMMON/haoyang/trim.log | sed "s/SITE_NAME/$SITE_NAME/" >> conf/log4j.properties
 }
 
 jdp() {
