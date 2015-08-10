@@ -736,7 +736,7 @@ jci() {
   wtl "Committing"
   pj
   vu
-  externals=("${(@f)$(stm | cut -c9- | cut -d '/' -f 1 | sort | uniq)}")
+  externals=("${(@f)$(vsm | cut -c9- | cut -d '/' -f 1 | sort | uniq)}")
   vc $1 $externals
   vu
   o ${externals[1]}
