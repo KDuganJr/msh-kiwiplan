@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Kall/fstar.splitship.dump.tar
+export CDS=/KIWI/datasets/Irani
 
 # }}}
 
@@ -79,19 +79,20 @@ cds() {
   crc CDS $(pwd) kiwiplan
   rm /kiwi/data
   sc $(pwd)/MAP /kiwi/data
+  if ls $(pwd)/MAP/*.sql; then
+		mysql -uroot -proot -e "drop database map"
+		mysql -uroot -proot -e "create database map"
+		mysql -uroot -proot map < $(pwd)/MAP/*.sql
+    KWSQL_FILE=$(pwd)/MAP/kwsql
+    r $KWSQL_FILE
+    e "DATA=map" >> $KWSQL_FILE
+    e "HOST=localhost" >> $KWSQL_FILE
+    e "INTERFACE=sql" >> $KWSQL_FILE
+    e "LOG=error" >> $KWSQL_FILE
+    e "LOGPID=1" >> $KWSQL_FILE
+	fi
   jdi $1
   wtu "Changing dataset [DONE]"
-
-#  if [[ "$TARGET" = *.sql ]]; then
-#    ln -s $DS/sql /kiwi/data
-#    TARGET_DB=$(echo $TARGET | sed s/.sql//)
-#    KWSQL_FILE=$DS/sql/kwsql
-#    rm $KWSQL_FILE
-#    echo "DATA=$TARGET" >> $KWSQL_FILE
-#    echo "HOST=localhost" >> $KWSQL_FILE
-#    echo "INTERFACE=sql" >> $KWSQL_FILE
-#    echo "LOG=error" >> $KWSQL_FILE
-#    echo "LOGPID=1" >> $KWSQL_FILE
 }
 
 # Data Set: Data Sets
