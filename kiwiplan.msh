@@ -250,7 +250,7 @@ export JAVA_HOME=/usr/lib/jvm/java-6-oracle
 export JPJ_ROOT=~/projects
 export JPJ=all-8.10
 export JPD=$(lnode $JPJ - 1)
-MERGEREV=("mes-8.10" "mes-8.10.1") export MERGEREV
+MERGEREV=("all-8.14.1") export MERGEREV
 export JREV=$(e $JPJ | cut -c5-)
 export JHD=mes-8.0
 export JMB=mes-8.0
@@ -732,28 +732,30 @@ jja() {
 # Java Commit
 # jci "Comment" : Commit with "Comment" for the current rev, merging to revisions in $MERGEREV
 jci() {
+	export MSH_PREFERRED_REPOSITORY_TYPE=SVN
   wtl "Committing"
   pj
-  up
-  externals=("${(@f)$(stm | cut -c9- | cut -c-3)}")
-  ci $1 $externals
-  up
+  vu
+  externals=("${(@f)$(stm | cut -c9- | cut -d '/' -f 1 | sort | uniq)}")
+  vc $1 $externals
+  vu
   o ${externals[1]}
   merge_to_rev=$(svnlog haoyang | head -2 | tail -1 | cut -d " " -f 1 | cut -c2-)
   for rev in $MERGEREV; do
     e --- Merging to $rev..
     pjr
     o $rev
-    up
+    vu
     for external in $externals; do
       o $external
       mg $JREV $merge_to_rev
       o ..
     done
-    ci $1 $externals
-    up
+    vc $1 $externals
+    vu
   done
   wtu "Committing [DONE]"
+	export MSH_PREFERRED_REPOSITORY_TYPE=GIT
 }
 
 
