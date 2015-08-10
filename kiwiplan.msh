@@ -118,7 +118,7 @@ vds() {
 
 upall() {
   pj
-  svn up
+	vu
   jats
   upjava
   upmap
@@ -748,7 +748,7 @@ jci() {
     vu
     for external in $externals; do
       o $external
-      mg $JREV $merge_to_rev
+      vbm $JREV $merge_to_rev
       o ..
     done
     vc $1 $externals
@@ -760,6 +760,26 @@ jci() {
 
 
 # }}}
+
+# Version Control {{{
+
+# (Kiwiplan) Version Control : Update
+# vu : Update master from the svn repository, then merge current branch to master
+vu() {
+	vbc=$(vbc)
+	if [[ $vbc != "master" ]]; then
+		vbs master
+	fi
+	svn up
+	git add .
+	rca "svn up"
+	if [[ $vbc != "master" ]]; then
+		vbs $vbc
+		vbm master
+	fi
+}
+
+#}}}
 
 #}}}
 
@@ -952,19 +972,6 @@ mwc() {
   rm *.out
   rm core
   rm SQLERROR.*
-}
-
-# }}}
-
-# MAP Workflow {{{
-
-mgmess() {
-  m
-  pj && rv && up
-  svn merge -c 11111 $SVN/trunk
-  echo pj
-  hd && rv && up
-  echo hd
 }
 
 # }}}
