@@ -78,7 +78,7 @@ cds() {
   wtl "Changing dataset"
   crc CDS $(pwd) kiwiplan
   rm /kiwi/data
-  sc $(pwd)/MAP /kiwi/data
+  dl $(pwd)/MAP /kiwi/data
   if ls $(pwd)/MAP/*.sql; then
 		mysql -uroot -proot -e "drop database map"
 		mysql -uroot -proot -e "create database map"
