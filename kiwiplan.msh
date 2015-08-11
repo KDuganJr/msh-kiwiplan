@@ -244,7 +244,18 @@ demo() {
 
 #### Java Development {{{
 
-export JAVA_HOME=/usr/lib/jvm/java-6-oracle
+export JAVA_HOME=/usr/lib/jvm/java-7-oracle
+
+# Aliases {{{
+
+alias ja='mvn clean install'
+alias jats='mvn clean install -Dmaven.test.skip'
+alias pe='mvn eclipse:eclipse'
+alias dp='deploy'
+alias jr='jrebel'
+alias dp='deploy'
+
+# }}}
 
 # Java Navigation {{{
 
