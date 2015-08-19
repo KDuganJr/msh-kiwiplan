@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Kall/fstar.splitship.dump.tar
+export CDS=/KIWI/datasets/Kall/5662355
 
 # }}}
 
@@ -244,7 +244,7 @@ demo() {
 
 #### Java Development {{{
 
-export JAVA_HOME=/usr/lib/jvm/java-7-oracle
+export JAVA_HOME=/usr/lib/jvm/java-6-oracle
 
 # Aliases {{{
 
@@ -311,7 +311,7 @@ cm() {
 
 # Go to java installer directory
 in() {
-  o $IN_ROOT/$IN
+  o $IN_ROOT/$JIN
 }
 
 # Go to java work directory
@@ -372,7 +372,7 @@ ssc() {
 
 # Go to java installers directory
 jind() {
-  o $IN
+  o $IN_ROOT
   if [[ -d $SITE_NAME ]]; then
     o $SITE_NAME
   fi
@@ -524,13 +524,13 @@ EOF
 }
 
 jid() {
-  d $IN/$JIN
+  d $IN_ROOT/$JIN
   rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JIN | sed "s/-[^-]*$//")/ . $JIN'-*'
   cplic $JPD
 }
 
 jwid() {
-  d $IN/$JSV
+  d $IN_ROOT/$JSV
   if [[ -d windows ]]; then
     rm -rf windows
   fi
