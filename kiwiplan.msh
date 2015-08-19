@@ -506,7 +506,7 @@ jtst() {
 	fi
 }
 
-
+# Upgrade java services
 jup() {
   sps
   jid
