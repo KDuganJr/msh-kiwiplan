@@ -244,7 +244,7 @@ demo() {
 
 #### Java Development {{{
 
-export JAVA_HOME=/usr/lib/jvm/java-6-oracle
+export JAVA_HOME=/usr/lib/jvm/java-7-oracle
 
 # Aliases {{{
 
@@ -774,6 +774,14 @@ jci() {
 # }}}
 
 # Version Control {{{
+
+svn() {
+	if [[ $(vbc) != "" && $(vbc) != "master" ]]; then
+		echo Don\'t use svn in the $(vbc) branch
+	else
+		svn $@
+	fi
+}
 
 # (Kiwiplan) Version Control : Update
 # vu : Update master from the svn repository, then merge current branch to master
