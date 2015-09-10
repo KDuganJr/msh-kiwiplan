@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Kall/5662355
+export CDS=/KIWI/datasets/Irani/outsource
 
 # }}}
 
@@ -90,6 +90,8 @@ cds() {
     e "INTERFACE=sql" >> $KWSQL_FILE
     e "LOG=error" >> $KWSQL_FILE
     e "LOGPID=1" >> $KWSQL_FILE
+    e "USER=root" >> $KWSQL_FILE
+    e "PASS=root" >> $KWSQL_FILE
 	fi
   jdi $1
   wtu "Changing dataset [DONE]"
@@ -170,6 +172,10 @@ boomdl() {
 gromblecollect() {
   dc gromble
   scp -r gromble:/support/support/nzcollect/$1 .
+}
+
+sim19() {
+	scp sim@sim19.kiwiplan.us:~/$1 .
 }
 
 gromble() {
@@ -775,11 +781,13 @@ jci() {
 
 # Version Control {{{
 
+binsvn=$(which svn)
+
 svn() {
-	if [[ $(vbc) != "" && $(vbc) != "master" ]]; then
+	if [[ $(vbc) != "vbc"* && $(vbc) != "master" ]]; then
 		echo Don\'t use svn in the $(vbc) branch
 	else
-		svn $@
+		/usr/bin/svn $@
 	fi
 }
 
