@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Irani/outsource
+export CDS=/KIWI/datasets/Irani/shippingfailed
 
 # }}}
 
@@ -256,7 +256,7 @@ demo() {
 
 #### Java Development {{{
 
-export JAVA_HOME=/usr/lib/jvm/java-7-oracle
+export JAVA_HOME=/usr/lib/jvm/java-6-oracle
 
 # Aliases {{{
 
@@ -696,7 +696,7 @@ jdt() {
 
 jdp() {
 	pj
-  modified_projects=("${(@f)$(svn st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
 	e
 	e Projects modified:
 	e
@@ -729,7 +729,7 @@ jdpa() {
 
 jja() {
 	pj
-  modified_projects=("${(@f)$(svn st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
 	e
 	e Projects modified:
 	e
@@ -787,7 +787,13 @@ jci() {
 
 # Version Control {{{
 
-binsvn=$(which svn)
+if [[ $binsvn == "" ]]; then
+	binsvn=$(which svn)
+fi
+
+svnf() {
+	eval "$binsvn $@"
+}
 
 svn() {
 	if [[ $(vbc) != "vbc"* && $(vbc) != "master" ]]; then
