@@ -240,9 +240,15 @@ aurora() {
 }
 
 # Drop file to martina
-# martina file
-martina() {
+# tomartina file
+tomartina() {
 	scp $1 ssd@aurora:/data/martina
+}
+
+# Pickup file from martina
+# frommartina file
+frommartina() {
+	scp -r ssd@aurora:/data/martina/$1 .
 }
 
 # Demo machine
@@ -256,7 +262,7 @@ demo() {
 
 #### Java Development {{{
 
-export JAVA_HOME=/usr/lib/jvm/java-6-oracle
+export JAVA_HOME=/usr/lib/jvm/java-7-oracle
 
 # Aliases {{{
 
