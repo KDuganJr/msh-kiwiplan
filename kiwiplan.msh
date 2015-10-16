@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Irani/shippingfailed
+export CDS=/KIWI/datasets/IP/Chile
 
 # }}}
 
