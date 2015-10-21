@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/IP/Chile
+export CDS=/KIWI/datasets/Test/sets
 
 # }}}
 
@@ -262,18 +262,36 @@ demo() {
 
 #### Java Development {{{
 
-export JAVA_HOME=/usr/lib/jvm/java-7-oracle
+export JAVA_HOME=/usr/lib/jvm/java-6-oracle
 
-# Aliases {{{
+setjavahome() {
+  if evn "pwd | grep 8.10"; then
+    JAVA_HOME=/usr/lib/jvm/java-6-oracle
+    e using JAVA 6
+  else 
+    JAVA_HOME=/usr/lib/jvm/java-7-oracle
+    e using JAVA 7
+  fi
+}
 
-alias ja='mvn clean install'
-alias jats='mvn clean install -Dmaven.test.skip'
-alias pe='mvn eclipse:eclipse'
-alias dp='deploy'
-alias jr='jrebel'
-alias dp='deploy'
+ja() {
+  setjavahome
+  mvn clean install
+}
 
-# }}}
+jats() {
+  setjavahome
+  mvn clean install -Dmaven.test.skip
+}
+
+dp() {
+  setjavahome
+  deploy
+}
+
+jr() {
+  jrebel
+}
 
 # Java Navigation {{{
 
