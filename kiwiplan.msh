@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Test/sets
+export CDS=/KIWI/datasets/Kall/5734670
 
 # }}}
 
@@ -23,7 +23,6 @@ export CDS=/KIWI/datasets/Test/sets
 # Data Set : Unload Data Set
 # uds a.dump.tar : Unload a.dump.tar and change to that dataset
 uds() {
-
 	if [[ $2 != "" ]]; then
 		dsname=$2
 	else
@@ -39,9 +38,9 @@ uds() {
 		r $dspath
 	fi
 	md $dspath
-	cp $1 $dspath
+	cp $1 $dspath/$1.tar
 	d $dspath
-	uz $1
+	uz $1.tar
 	uz *
 
 # Logs
@@ -54,15 +53,16 @@ uds() {
 # MAP
 	mmd *classic* MAP
 	d MAP
-	m * "*.tar"
-	uz *
-	mapprofile
-	d ..
+#  m * map.sql
+ m * "*.tar"
+ uz *
+  mapprofile
+  d ..
 
 # SQL
 	mmd *.dump VUE
 	d VUE
-	mtp * '$SQL_PREFIX$(lnode $f . 2).sql'
+	mtp * '$SQL_PREFIX$(lnode $f . 1).sql'
 	mtp *man* '$(echo $f | ts man mapman)'
 	d ..
 
@@ -80,9 +80,9 @@ cds() {
   rm /kiwi/data
   dl $(pwd)/MAP /kiwi/data
   if ls $(pwd)/MAP/*.sql; then
-		mysql -uroot -proot -e "drop database map"
-		mysql -uroot -proot -e "create database map"
-		mysql -uroot -proot map < $(pwd)/MAP/*.sql
+		mysql -uroot -proot -e "drop database map2"
+		mysql -uroot -proot -e "create database map2"
+		mysql -uroot -proot map2 < $(pwd)/MAP/*.sql
     KWSQL_FILE=$(pwd)/MAP/kwsql
     r $KWSQL_FILE
     e "DATA=map" >> $KWSQL_FILE
@@ -174,7 +174,8 @@ gromblecollect() {
   scp -r gromble:/support/support/nzcollect/$1 .
 }
 
-sim19() {
+sim19collect() {
+  dc sim19
 	scp sim@sim19.kiwiplan.us:~/$1 .
 }
 
@@ -454,8 +455,17 @@ dbt() {
 
 # Edit java fix time
 fixtime() {
-  vi $SV_ROOT/$SV/current/conf/kiwiplan/time.properties;
-  cp $SV_ROOT/$SV/current/conf/kiwiplan/time.properties $TC_ROOT/$SV/current/kiwiconf/kiwiplan/time.properties;
+  vi $SV_ROOT/$SV/current/conf/kiwiplan/time.properties
+  cp $SV_ROOT/$SV/current/conf/kiwiplan/time.properties $TC_ROOT/$SV/current/kiwiconf/kiwiplan/time.properties
+}
+
+# Remove fix time
+unfixtime() {
+  r $SV_ROOT/$SV/current/conf/kiwiplan/time.properties
+  r $TC_ROOT/$SV/current/kiwiconf/kiwiplan/time.properties
+  mds
+  bur PROFILE
+  mapprofile
 }
 
 # View latest java comms response
@@ -535,6 +545,7 @@ jstss() {
 
 jtst() {
 	if [[ $1 == "" ]]; then
+    setjavahome
 		maven build-all || cat target/test-reports/*.txt
 	else
 		testclass=$(find testsrc -name "$1.java" | cut -d "." -f1 | sed 's/^testsrc\///g')
@@ -554,11 +565,12 @@ $SITE_NAME
 
  
 EOF
-  jstss
   sv
   sts
 }
 
+# Java Development : Download Installer
+# jid : Download the latest installer
 jid() {
   d $IN_ROOT/$JIN
   rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JIN | sed "s/-[^-]*$//")/ . $JIN'-*'
@@ -753,7 +765,7 @@ jdpa() {
 
 jja() {
 	pj
-  modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
 	e
 	e Projects modified:
 	e
