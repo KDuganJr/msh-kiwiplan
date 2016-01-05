@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Kall/5734670
+export CDS=/KIWI/datasets/Kall/shoreline
 
 # }}}
 
@@ -61,6 +61,7 @@ uds() {
 
 # SQL
 	mmd *.dump VUE
+  mv time.properties VUE
 	d VUE
 	mtp * '$SQL_PREFIX$(lnode $f . 1).sql'
 	mtp *man* '$(echo $f | ts man mapman)'
@@ -304,8 +305,8 @@ export JREV=$(e $JPJ | cut -c5-)
 export JHD=mes-8.0
 export JMB=mes-8.0
 export JSV_ROOT=/kiwi/java/sites
-export JSV=mes_8_10
-export JIN=mes-8.10
+export JSV=mes_8_21
+export JIN=mes-8.21
 export SITE_NAME=$JSV
 export VDS=$CDS/VUE
 export REBEL_HOME=~/.IdeaIC11/config/plugins/jr-ide-idea/lib/jrebel
