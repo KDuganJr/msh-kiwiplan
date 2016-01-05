@@ -264,30 +264,17 @@ demo() {
 
 #### Java Development {{{
 
-export JAVA_HOME=/usr/lib/jvm/java-6-oracle
-
-setjavahome() {
-  if evn "pwd | grep 8.10"; then
-    JAVA_HOME=/usr/lib/jvm/java-6-oracle
-    e using JAVA 6
-  else 
-    JAVA_HOME=/usr/lib/jvm/java-7-oracle
-    e using JAVA 7
-  fi
-}
+export JAVA_HOME=/usr/lib/jvm/java-7-oracle
 
 ja() {
-  setjavahome
   mvn clean install
 }
 
 jats() {
-  setjavahome
   mvn clean install -Dmaven.test.skip
 }
 
 dp() {
-  setjavahome
   deploy
 }
 
@@ -298,7 +285,7 @@ jr() {
 # Java Navigation {{{
 
 export JPJ_ROOT=~/projects
-export JPJ=all-8.10
+export JPJ=all-8.21
 export JPD=$(lnode $JPJ - 1)
 MERGEREV=("all-8.14.1") export MERGEREV
 export JREV=$(e $JPJ | cut -c5-)
@@ -546,7 +533,6 @@ jstss() {
 
 jtst() {
 	if [[ $1 == "" ]]; then
-    setjavahome
 		maven build-all || cat target/test-reports/*.txt
 	else
 		testclass=$(find testsrc -name "$1.java" | cut -d "." -f1 | sed 's/^testsrc\///g')
