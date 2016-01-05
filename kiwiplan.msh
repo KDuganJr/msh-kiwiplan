@@ -526,9 +526,6 @@ jsv() {
 
 jstss() {
 	cp $COMMON/roadgrids/* $SV_ROOT/$SV/current/conf/kiwiplan/roadgrids
-  tc
-  d webapps/kp-tss-map-tiles/maptiles
-  sudo mount nzmaptiles.kiwiplan.co.nz:/data/default  .
 }
 
 jtst() {
