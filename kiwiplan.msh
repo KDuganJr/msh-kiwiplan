@@ -138,6 +138,10 @@ calypso() {
   dm calypso
 }
 
+vult() {
+  ssh vult@nzvult
+}
+
 # Login to nzboom
 # If $1 is defined then upload the file to nzboom shared folder
 boom() {
