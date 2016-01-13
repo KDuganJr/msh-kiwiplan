@@ -275,6 +275,11 @@ ja() {
 }
 
 jats() {
+  if [[ -d kp-parent ]]; then
+    d kp-parent
+    mvn clean install -Dmaven.test.skip
+    d ..
+  fi
   mvn clean install -Dmaven.test.skip
 }
 
@@ -734,9 +739,9 @@ jdp() {
 	for project in $modified_projects; do
 		pj
 		cd $project
-		dp
+		dp || break
 	done
-	ss
+  ss
 }
 
 jdpa() {
