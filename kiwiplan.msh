@@ -841,7 +841,7 @@ vu() {
 	fi
 	svn up
 	git add .
-	rca "svn up"
+	vca "svn up"
 	if [[ $vbc != "master" ]]; then
 		vbs $vbc
 		vbm master
