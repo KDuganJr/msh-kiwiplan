@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Kall/shoreline
+export CDS=/KIWI/datasets/Fivestar/Dec
 
 # }}}
 
@@ -863,7 +863,7 @@ vbmc() {
 # MAP Navigation {{{
 
 export MAP_REV_SRC=boom_base
-export MAP_REV=8.10_01apr2015
+export MAP_REV=8.11_02apr2015
 export MAP_DATA_REV=01oct2014
 export MAP_TRUNK=trunk
 export MAP_BRANCH=dev_branches/messaging
