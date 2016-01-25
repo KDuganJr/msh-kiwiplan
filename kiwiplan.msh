@@ -725,7 +725,9 @@ jdt() {
 
 jdp() {
 	pj
-  modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+# below for svn
+  #modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  modified_projects=("${(@f)$(git status -s | grep -v sqlsrc | cut -d " " -f3 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
 	e
 	e Projects modified:
 	e
