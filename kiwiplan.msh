@@ -14,7 +14,7 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/Fivestar/Dec
+export CDS=/KIWI/datasets/rest/testwip
 
 # }}}
 
@@ -294,15 +294,15 @@ jr() {
 # Java Navigation {{{
 
 export JPJ_ROOT=~/projects
-export JPJ=all-8.21
+export JPJ=all-8.30
 export JPD=$(lnode $JPJ - 1)
 MERGEREV=("all-8.14.1") export MERGEREV
 export JREV=$(e $JPJ | cut -c5-)
 export JHD=mes-8.0
 export JMB=mes-8.0
 export JSV_ROOT=/kiwi/java/sites
-export JSV=mes_8_21
-export JIN=mes-8.21
+export JSV=mes_8_30
+export JIN=mes-8.30
 export SITE_NAME=$JSV
 export VDS=$CDS/VUE
 export REBEL_HOME=~/.IdeaIC11/config/plugins/jr-ide-idea/lib/jrebel
@@ -724,10 +724,10 @@ jdt() {
 }
 
 jdp() {
-	pj
+	#pj
 # below for svn
-  #modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
-  modified_projects=("${(@f)$(git status -s | grep -v sqlsrc | cut -d " " -f3 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  #modified_projects=("${(@f)$(git status -s | grep -v sqlsrc | cut -d " " -f3 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
 	e
 	e Projects modified:
 	e
@@ -866,7 +866,7 @@ vbmc() {
 
 export MAP_REV_SRC=boom_base
 export MAP_REV=8.11_02apr2015
-export MAP_DATA_REV=01oct2014
+export MAP_DATA_REV=01apr2016
 export MAP_TRUNK=trunk
 export MAP_BRANCH=dev_branches/messaging
 export MPJ_ROOT=~/projects/map
@@ -921,9 +921,13 @@ mwk() {
 
 # Restore MAP QA ISAM dataset
 rest() {
-  mds
-  r *
+  ds
+  d rest
+  r test$1
+  d test$1/MAP
   scp -r "ssd@aurora:/mapqa/master_$MAP_DATA_REV/test$1/*" .
+  d ..
+  cds
 }
 
 # Restore MAP QA SQL dataset
