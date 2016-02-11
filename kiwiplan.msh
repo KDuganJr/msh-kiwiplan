@@ -14,7 +14,6 @@ fi
 # General Navigation {{{
 
 export DS=/KIWI/datasets
-export CDS=/KIWI/datasets/rest/testwip
 
 # }}}
 
@@ -81,9 +80,9 @@ cds() {
   rm /kiwi/data
   dl $(pwd)/MAP /kiwi/data
   if ls $(pwd)/MAP/*.sql; then
-		mysql -uroot -proot -e "drop database map2"
-		mysql -uroot -proot -e "create database map2"
-		mysql -uroot -proot map2 < $(pwd)/MAP/*.sql
+		sqle "drop database map"
+		sqle "create database map"
+		sql map < $(pwd)/MAP/*.sql
     KWSQL_FILE=$(pwd)/MAP/kwsql
     r $KWSQL_FILE
     e "DATA=map" >> $KWSQL_FILE
@@ -91,8 +90,8 @@ cds() {
     e "INTERFACE=sql" >> $KWSQL_FILE
     e "LOG=error" >> $KWSQL_FILE
     e "LOGPID=1" >> $KWSQL_FILE
-    e "USER=root" >> $KWSQL_FILE
-    e "PASS=root" >> $KWSQL_FILE
+    e "USER=$MSH_SQL_USER" >> $KWSQL_FILE
+    e "PASS=$MSH_SQL_PASS" >> $KWSQL_FILE
 	fi
   jdi $1
   wtu "Changing dataset [DONE]"
@@ -138,6 +137,8 @@ calypso() {
   dm calypso
 }
 
+# Server : VULT
+# vult : SSH to the vult server
 vult() {
   ssh vult@nzvult
 }
@@ -294,20 +295,15 @@ jr() {
 # Java Navigation {{{
 
 export JPJ_ROOT=~/projects
-export JPJ=all-8.30
 export JPD=$(lnode $JPJ - 1)
 MERGEREV=("all-8.14.1") export MERGEREV
 export JREV=$(e $JPJ | cut -c5-)
 export JHD=mes-8.0
 export JMB=mes-8.0
-export JSV_ROOT=/kiwi/java/sites
-export JSV=mes_8_30
-export JIN=mes-8.30
 export SITE_NAME=$JSV
 export VDS=$CDS/VUE
 export REBEL_HOME=~/.IdeaIC11/config/plugins/jr-ide-idea/lib/jrebel
 export CM_ROOT=/kiwi/java/comms
-export TC_ROOT=/kiwi/java/tomcat
 export WK_ROOT=/kiwi/java/work
 export IN_ROOT=~/installers
 export JSVN="svn+ssh://corona2/svn/mapjava"
@@ -356,7 +352,7 @@ wk() {
 sss() {
   if [[ $(pf jvm java jini | wc -l) == 0 ]]; then
     e DOWN
-  elif [[ $(pf jvm java tomcat jini | wc -l) == 1 ]]; then
+  elif [[ $(pf jvm java catalina | wc -l) == 1 ]]; then
     e UP
   else
     e STARTING
@@ -443,7 +439,7 @@ lge() {
 
 # Start tomcat debug
 dbt() {
-  pk tomcat
+  pk catalina
   export JPDA_ADDRESS=13067
   export JPDA_TRANSPORT=dt_socket
   tc
@@ -723,6 +719,13 @@ jdt() {
   cat $COMMON/haoyang/trim.log | sed "s/SITE_NAME/$SITE_NAME/" >> conf/log4j.properties
 }
 
+jdpw() {
+  pj
+  o inv
+  o kp-forklift-web
+  deploy --nojar
+}
+
 jdp() {
 	#pj
 # below for svn
@@ -741,9 +744,9 @@ jdp() {
 	for project in $modified_projects; do
 		pj
 		cd $project
-		dp || break
+		dp
 	done
-  ss
+	ss
 }
 
 jdpa() {
@@ -865,8 +868,6 @@ vbmc() {
 # MAP Navigation {{{
 
 export MAP_REV_SRC=boom_base
-export MAP_REV=8.11_02apr2015
-export MAP_DATA_REV=01apr2016
 export MAP_TRUNK=trunk
 export MAP_BRANCH=dev_branches/messaging
 export MPJ_ROOT=~/projects/map
