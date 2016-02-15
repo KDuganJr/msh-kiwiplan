@@ -917,7 +917,7 @@ alias map="mode <<< 2"
 
 # Go to MAP work directory
 mwk() {
-  o $KIWIWORK
+  d $KIWIWORK
 }
 
 # Restore MAP QA ISAM dataset
