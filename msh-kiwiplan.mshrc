@@ -1,0 +1,23 @@
+# The location of the dataset, which contains MAP/VUE subdirectories, see `cds` for more info
+export CDS=/KIWI/datasets/customer-x/site-x
+
+# The location for the service root, where service instances are installed
+export JSV_ROOT=/kiwi/services/sites
+
+# The location for the web/tomcat root, where tomcat instances are installed
+export TC_ROOT=/kiwi/services/web
+
+# The active project (under ~/projects)
+export JPJ=all-8.30
+
+# The active service/site name
+export JSV=mes-8.30
+
+# The active installer version
+export JIN=mes-8.30
+
+# The active maprev
+export MAP_REV=8.30_01apr2016
+
+# The active maprev for getting restore datasets
+export MAP_DATA_REV=01apr2016
