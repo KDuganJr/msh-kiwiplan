@@ -9,6 +9,18 @@ if [[ $MODE != "MAP" && $MODE != "VUE" ]]; then
 fi
 # }}}
 
+#### Prompt {{{
+
+# (Internal) Shell : Top Prompt
+# _stp : Show top prompt
+_stp() {
+  _stp_id
+  e " $CYAN$(rnode $CDS \/ 1) $(rnode $CDS \/ 0)   $BLUE$(vt) | $MODE | $PJ   $GREEN $SV | $MAP_REV | $MAP_DATA_REV $FINISH"
+  _stp_command
+}
+
+# }}}
+
 #### General Developement {{{
 
 # General Navigation {{{
@@ -74,6 +86,7 @@ uds() {
 
 # Data Set: Change Data Set
 # cds : Change data set
+# cds maponly : Change the MAP data set
 cds() {
   wtl "Changing dataset"
   crc CDS $(pwd) kiwiplan
@@ -93,7 +106,9 @@ cds() {
     e "USER=$MSH_SQL_USER" >> $KWSQL_FILE
     e "PASS=$MSH_SQL_PASS" >> $KWSQL_FILE
 	fi
-  jdi $1
+  if [[ $1 != "maponly" ]]; then
+    jdi $1
+  fi
   wtu "Changing dataset [DONE]"
 }
 
@@ -140,7 +155,7 @@ calypso() {
 # Server : VULT
 # vult : SSH to the vult server
 vult() {
-  ssh vult@nzvult
+  ssh nzvult
 }
 
 # Login to nzboom
@@ -244,6 +259,10 @@ kpi() {
 # Login to aurora
 aurora() {
   o $MNT/aurora
+}
+
+tomelody() {
+  scp -r $1 ssd@nzdawn:/data/melody
 }
 
 # Drop file to martina
@@ -351,11 +370,11 @@ wk() {
 
 sss() {
   if [[ $(pf jvm java jini | wc -l) == 0 ]]; then
-    e DOWN
+    e DOWN $(evn grep -i exception $SV_ROOT/$SV/current/logs/* && echo with ERROR)
   elif [[ $(pf jvm java catalina | wc -l) == 1 ]]; then
-    e UP
+    e UP $(evn grep -i exception $SV_ROOT/$SV/current/logs/* && echo with ERROR)
   else
-    e STARTING
+    e STARTING $(evn grep -i exception $SV_ROOT/$SV/current/logs/* && echo with ERROR)
   fi
 }
 
@@ -729,8 +748,12 @@ jdpw() {
 jdp() {
 	#pj
 # below for svn
-  modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
-  #modified_projects=("${(@f)$(git status -s | grep -v sqlsrc | cut -d " " -f3 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  #modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  if [[ $1 == "all" ]]; then
+    modified_projects=("${(@f)$(git diff master --name-status | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | cut -f2 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  else
+    modified_projects=("${(@f)$(git status -s | grep -v sqlsrc | cut -d " " -f3 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  fi
 	e
 	e Projects modified:
 	e
@@ -759,6 +782,22 @@ jdpa() {
 		dp
 	done
 	ss
+}
+
+jdpainv() {
+  pj
+  o inf
+  o kp-native-api
+  dp || return
+  pj
+  o mapintegration
+  o kp-native
+  o kp-native-impl
+  dp || return
+  pj
+  o inv
+  dp || return
+  ss
 }
 
 jja() {
@@ -856,7 +895,17 @@ vu() {
 # (Kiwiplan) Version Control : Branch Merge Commit
 # vbmc 7.72 8399 : Merge r8399 from branch 7.72 to the working copy
 vbmc() {
-	svn merge -c $2 $(svn info | s URL | cut -d " " -f 2 | sed -r 's/branches\/[^\/]*/branches\/'$1'/')
+	svn merge -c $2 $(svn info | s ^URL | cut -d " " -f 2 | sed -r 's/branches\/[^\/]*/branches\/'$1'/')
+}
+vbmcinv() {
+  o inv
+  vbmc $@
+  o ..
+  o inf
+  vbmc $@
+  o ..
+  o mapintegration
+  vbmc $@
 }
 
 #}}}
@@ -909,8 +958,8 @@ export KIWIETC=/kiwi/etc
 export KIWIWORK=/kiwi/work
 export KIWISEA=$MDS:$KIWIPROGS:$KIWISQL:$KIWISCP:$KIWIBIN:$KIWIETC:$KIWIWORK
 export LD_LIBRARY_PATH=$KIWIPROGS
-export KWSQL_USER=test
-export KWSQL_PASS=test
+export KWSQL_USER=root
+export KWSQL_PASS=root
 
 
 alias map="mode <<< 2"
@@ -975,8 +1024,10 @@ xm() {
   xmgen grp=$1
 }
 ult() {
+  wt ult
   mwk
   ult00
+  wt
 }
 rss() {
   mwk
@@ -993,6 +1044,8 @@ xl() {
 # }}}
 
 # MAP Setup {{{
+
+PATH=$PATH:/kiwi/bin:/kiwi/progs
 
 # Update MAP rev
 upmap() {
