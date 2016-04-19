@@ -453,7 +453,8 @@ lg() {
 # Java Development: Log Error
 # lge : Tail logs and monitor for errors
 lge() {
-  lg | s Exception
+  d logs
+  sl exception
 }
 
 # Start tomcat debug
