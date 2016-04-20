@@ -453,7 +453,8 @@ lg() {
 # Java Development: Log Error
 # lge : Tail logs and monitor for errors
 lge() {
-  lg | s Exception
+  d logs
+  sl exception
 }
 
 # Start tomcat debug
@@ -519,6 +520,7 @@ Y
 EOF
 }
 
+#NEEDDOC
 jpj() {
   vue
   menu 'svn ls $SVN/projects | si master | s '$1' | sed "s/\///"'
@@ -536,6 +538,7 @@ cplic() {
   cp $COMMON/licence/$1.licence .
 }
 
+#NEEDDOC
 jsv() {
   sps
   vue
@@ -746,11 +749,11 @@ jdpw() {
 }
 
 jdp() {
-	#pj
+	pj
 # below for svn
   #modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   if [[ $1 == "all" ]]; then
-    modified_projects=("${(@f)$(git diff master --name-status | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | cut -f2 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+    modified_projects=("${(@f)$(git diff $MSH_MAIN_BRANCH --name-status | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | cut -f2 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   else
     modified_projects=("${(@f)$(git status -s | grep -v sqlsrc | cut -d " " -f3 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   fi
@@ -869,7 +872,7 @@ svnf() {
 }
 
 svn() {
-	if [[ $(vbc) != "vbc"* && $(vbc) != "master" ]]; then
+	if [[ $(vbc) != "vbc"* && $(vbc) != $MSH_MAIN_BRANCH ]]; then
 		echo Don\'t use svn in the $(vbc) branch
 	else
 		/usr/bin/svn $@
@@ -877,18 +880,18 @@ svn() {
 }
 
 # (Kiwiplan) Version Control : Update
-# vu : Update master from the svn repository, then merge current branch to master
+# vu : Update $MSH_MAIN_BRANCH from the svn repository, then merge current branch to $MSH_MAIN_BRANCH
 vu() {
 	vbc=$(vbc)
-	if [[ $vbc != "master" ]]; then
-		vbs master
+	if [[ $vbc != $MSH_MAIN_BRANCH ]]; then
+		vbs $MSH_MAIN_BRANCH
 	fi
 	svn up
 	git add .
 	vca "svn up"
-	if [[ $vbc != "master" ]]; then
+	if [[ $vbc != $MSH_MAIN_BRANCH ]]; then
 		vbs $vbc
-		vbm master
+		vbm $MSH_MAIN_BRANCH
 	fi
 }
 
@@ -1121,4 +1124,66 @@ mci() {
 
 #}}}
  
+#}}}
+
+#### SVN GIT Mirroring {{{
+
+vmactive() {
+	wt vmactive-$(vbc)
+	while true; do
+		if [[ -a /vmlock/0.$(vbc) ]]; then
+			git pull
+			if [[ $(svnf st inf inv tss mapintegration | wc -l) -gt 0 ]] && git log | head -8 | grep haoyang; then
+				message=$(git log | head -10 | tail -1 | cut -c5-)
+				svnf add --force inf inv tss mapintegration
+				svnf st inf inv tss mapintegration | grep ^! | awk '{print " --force "$2}' | xargs svnf rm
+				svnf ci inf inv tss mapintegration -m \"$message\"
+				vcap "After svn commit $message"
+			fi
+			svnf up inf inv tss mapintegration --force --accept tf
+			vcap "$(svnf log svn+ssh://corona2/svn/mapjava | head -2 | tail -1 | cut -d\| -f2 | cut -c2-)$(svnf log svn+ssh://corona2/svn/mapjava | head -4 | tail -1)"
+			mv /vmlock/0.$(vbc) /vmlock/1.$(vbc)
+		else
+			echo VM is locked.. wait
+		fi
+		sleep 30
+	done
+}
+
+vmsvn() {
+	r kp-parent inf inv mapintegration tss
+	svnf co $SVN/kp-parent/branches/$1 kp-parent
+	svnf co $SVN/inf/branches/$1 inf
+	svnf co $SVN/inv/branches/$1 inv
+	svnf co $SVN/mapintegration/branches/$1 mapintegration
+	svnf co $SVN/tss/branches/$1 tss
+}
+
+vmpassive() {
+        wt vmpassive-$(vbc)
+	while true; do
+		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
+			git pull || break
+			if [[ $(svnf st inf inv mapintegration tss | wc -l) -gt 0 ]] && git log | head -8 | grep $MSH_VM_USER; then
+				message=$(git log | head -10 | tail -1 | cut -c5-)
+				if [[ $message != *SCM* ]]; then
+					echo Bad message STOP
+					break
+				fi
+				svnf add --force inf inv tss mapintegration
+				svnf st inf inv tss mapintegration | grep ^! | awk '{print " --force "$2}' | xargs svnf rm
+				svnf ci inf inv mapintegration tss -m \"$message\"
+				vcap "After svn commit $message"
+			fi
+			svnf up inf inv mapintegration tss --force --accept mf
+			git reset --hard
+			git clean -f
+			mv /vmlock/$MSH_VM_ID.$(vbc) /vmlock/$MSH_VM_ID_NEXT.$(vbc)
+		else
+			echo VM is locked.. wait
+		fi
+		sleep 30
+	done
+}
+
 #}}}
