@@ -1157,4 +1157,31 @@ vmsvn() {
 	svnf co $SVN/tss/branches/$1 tss
 }
 
+vmpassive() {
+        wt vmpassive-$(vbc)
+	while true; do
+		if [[ -a /vmlock/1.$(vbc) ]]; then
+			git pull || break
+			if [[ $(svnf st inf inv mapintegration tss | wc -l) -gt 0 ]] && git log | head -8 | grep ushal; then
+				message=$(git log | head -10 | tail -1 | cut -c5-)
+				if [[ $message != *SCM* ]]; then
+					echo Bad message STOP
+					break
+				fi
+				svnf add --force inf inv tss mapintegration
+				svnf st inf inv tss mapintegration | grep ^! | awk '{print " --force "$2}' | xargs svnf rm
+				svnf ci inf inv mapintegration tss -m \"$message\"
+				vcap "After svn commit $message"
+			fi
+			svnf up inf inv mapintegration tss --force --accept mf
+			git reset --hard
+			git clean -f
+			mv /vmlock/1.$(vbc) /vmlock/2.$(vbc)
+		else
+			echo VM is locked.. wait
+		fi
+		sleep 30
+	done
+}
+
 #}}}
