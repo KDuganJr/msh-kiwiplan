@@ -453,7 +453,8 @@ lg() {
 # Java Development: Log Error
 # lge : Tail logs and monitor for errors
 lge() {
-  lg | s Exception
+  d logs
+  sl exception
 }
 
 # Start tomcat debug
@@ -1121,4 +1122,39 @@ mci() {
 
 #}}}
  
+#}}}
+
+#### SVN GIT Mirroring {{{
+
+vmactive() {
+	wt vmactive-$(vbc)
+	while true; do
+		if [[ -a /vmlock/0.$(vbc) ]]; then
+			git pull
+			if [[ $(svnf st inf inv tss mapintegration | wc -l) -gt 0 ]] && git log | head -8 | grep haoyang; then
+				message=$(git log | head -10 | tail -1 | cut -c5-)
+				svnf add --force inf inv tss mapintegration
+				svnf st inf inv tss mapintegration | grep ^! | awk '{print " --force "$2}' | xargs svnf rm
+				svnf ci inf inv tss mapintegration -m \"$message\"
+				vcap "After svn commit $message"
+			fi
+			svnf up inf inv tss mapintegration --force --accept tf
+			vcap "$(svnf log svn+ssh://corona2/svn/mapjava | head -2 | tail -1 | cut -d\| -f2 | cut -c2-)$(svnf log svn+ssh://corona2/svn/mapjava | head -4 | tail -1)"
+			mv /vmlock/0.$(vbc) /vmlock/1.$(vbc)
+		else
+			echo VM is locked.. wait
+		fi
+		sleep 30
+	done
+}
+
+vmsvn() {
+	r kp-parent inf inv mapintegration tss
+	svnf co $SVN/kp-parent/branches/$1 kp-parent
+	svnf co $SVN/inf/branches/$1 inf
+	svnf co $SVN/inv/branches/$1 inv
+	svnf co $SVN/mapintegration/branches/$1 mapintegration
+	svnf co $SVN/tss/branches/$1 tss
+}
+
 #}}}
