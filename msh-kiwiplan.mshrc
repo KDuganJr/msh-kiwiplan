@@ -21,3 +21,12 @@ export MAP_REV=8.30_01apr2016
 
 # The active maprev for getting restore datasets
 export MAP_DATA_REV=01apr2016
+
+# Current user lock ID for running vmpassive 
+export MSH_VM_ID=1
+
+# User lock ID to pass on after running vmpassive (normally be MSH_VM_ID +1 unless you are the last user, then this should be 0)
+export MSH_VM_ID_NEXT=2
+
+# Current user name for git merge
+export MSH_VM_USER=michelle
