@@ -1133,13 +1133,18 @@ vmactive() {
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git pull
-			if [[ $(svnf st inf inv tss mapintegration pics| wc -l) -gt 0 ]] && git log | head -8 | grep $MSH_VM_USER; then
+			if [[ $(svnf st inf inv tss mapintegration pics | wc -l) -gt 0 ]] && git log | head -8 | grep $MSH_VM_USER; then
 				message=$(git log | head -10 | tail -1 | cut -c5-)
+				if [[ $message != *SCM* ]]; then
+					echo Bad message STOP
+					break
+				fi
 				svnf add --force inf inv tss mapintegration pics 
-				svnf st inf inv tss mapintegration pics | grep ^! | awk '{print " --force "$2}' | xargs svnf rm
+				svnf st inf inv tss mapintegration pics | grep ^! | awk '{print " --force "$2}' | xargs svn rm
 				svnf ci inf inv tss mapintegration pics -m \"$message\"
 				vcap "After svn commit $message"
 			fi
+      svnf st inf inv tss mapintegration pics | grep ^! | awk '{print " --force "$2}' | xargs svn rm
 			svnf up inf inv tss mapintegration pics --force --accept tf
 			vcap "$(svnf log svn+ssh://corona2/svn/mapjava | head -2 | tail -1 | cut -d\| -f2 | cut -c2-)$(svnf log svn+ssh://corona2/svn/mapjava | head -4 | tail -1)"
 			mv /vmlock/$MSH_VM_ID.$(vbc) /vmlock/$MSH_VM_ID_NEXT.$(vbc)
@@ -1157,7 +1162,7 @@ vmsvn() {
 	svnf co $SVN/inv/branches/$1 inv
 	svnf co $SVN/mapintegration/branches/$1 mapintegration
 	svnf co $SVN/tss/branches/$1 tss
-        svnf co $SVN/pics/branches/$1 pics
+  svnf co $SVN/pics/branches/$1 pics
 }
 
 vmpassive() {
@@ -1172,7 +1177,7 @@ vmpassive() {
 					break
 				fi
 				svnf add --force inf inv tss mapintegration pics
-				svnf st inf inv tss mapintegration pics | grep ^! | awk '{print " --force "$2}' | xargs svnf rm
+				svnf st inf inv tss mapintegration pics | grep ^! | awk '{print " --force "$2}' | xargs svn rm
 				svnf ci inf inv tss mapintegration pics -m \"$message\"
 				vcap "After svn commit $message"
 			fi
