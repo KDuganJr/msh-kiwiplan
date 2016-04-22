@@ -1131,9 +1131,9 @@ mci() {
 vmactive() {
 	wt vmactive-$(vbc)
 	while true; do
-		if [[ -a /vmlock/0.$(vbc) ]]; then
+		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git pull
-			if [[ $(svnf st inf inv tss mapintegration pics| wc -l) -gt 0 ]] && git log | head -8 | grep haoyang; then
+			if [[ $(svnf st inf inv tss mapintegration pics| wc -l) -gt 0 ]] && git log | head -8 | grep $MSH_VM_USER; then
 				message=$(git log | head -10 | tail -1 | cut -c5-)
 				svnf add --force inf inv tss mapintegration pics 
 				svnf st inf inv tss mapintegration pics | grep ^! | awk '{print " --force "$2}' | xargs svnf rm
@@ -1142,7 +1142,7 @@ vmactive() {
 			fi
 			svnf up inf inv tss mapintegration pics --force --accept tf
 			vcap "$(svnf log svn+ssh://corona2/svn/mapjava | head -2 | tail -1 | cut -d\| -f2 | cut -c2-)$(svnf log svn+ssh://corona2/svn/mapjava | head -4 | tail -1)"
-			mv /vmlock/0.$(vbc) /vmlock/1.$(vbc)
+			mv /vmlock/$MSH_VM_ID.$(vbc) /vmlock/$MSH_VM_ID_NEXT.$(vbc)
 		else
 			echo VM is locked.. wait
 		fi
