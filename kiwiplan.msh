@@ -879,22 +879,6 @@ svn() {
 	fi
 }
 
-# (Kiwiplan) Version Control : Update
-# vu : Update $MSH_MAIN_BRANCH from the svn repository, then merge current branch to $MSH_MAIN_BRANCH
-vu() {
-	vbc=$(vbc)
-	if [[ $vbc != $MSH_MAIN_BRANCH ]]; then
-		vbs $MSH_MAIN_BRANCH
-	fi
-	svn up
-	git add .
-	vca "svn up"
-	if [[ $vbc != $MSH_MAIN_BRANCH ]]; then
-		vbs $vbc
-		vbm $MSH_MAIN_BRANCH
-	fi
-}
-
 # (Kiwiplan) Version Control : Branch Merge Commit
 # vbmc 7.72 8399 : Merge r8399 from branch 7.72 to the working copy
 vbmc() {
