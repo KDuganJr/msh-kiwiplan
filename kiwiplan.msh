@@ -370,11 +370,11 @@ wk() {
 
 sss() {
   if [[ $(pf jvm java jini | wc -l) == 0 ]]; then
-    e DOWN $(evn grep -i exception $SV_ROOT/$SV/current/logs/* && echo with ERROR)
+    e DOWN $(evn grep -ir exception $SV_ROOT/$SV/current/logs && echo with ERROR)
   elif [[ $(pf jvm java catalina | wc -l) == 1 ]]; then
-    e UP $(evn grep -i exception $SV_ROOT/$SV/current/logs/* && echo with ERROR)
+    e UP $(evn grep -ir exception $SV_ROOT/$SV/current/logs && echo with ERROR)
   else
-    e STARTING $(evn grep -i exception $SV_ROOT/$SV/current/logs/* && echo with ERROR)
+    e STARTING $(evn grep -ir exception $SV_ROOT/$SV/current/logs && echo with ERROR)
   fi
 }
 
