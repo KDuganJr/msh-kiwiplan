@@ -1124,6 +1124,30 @@ mci() {
 
 #}}}
  
+
+# MAP Utils {{{
+
+# MAP Utils : Rename Job
+# mrj 1234567 1234567/A : Rename job 1234567 to 1234567/A
+mrj() {
+  sqle "update map.JBSPEC set job_number='$2' where job_number='$1'"
+  sqle "update map.SITEMP set job_number='$2' where job_number='$1'"
+  sqle "update map.WORKIP set job_number='$2' where job_number='$1'"
+  sqle "update map.FACTRY set job_number='$2' where job_number='$1'"
+  sqle "update map.ULOADC set job_number='$2' where job_number='$1'"
+  sqle "update map.ULOADH set job_number='$2' where job_number='$1'"
+  sqle "update map.DLISTS set load_list_job='$2' where load_list_job='$1'"
+  sqle "update map.CORSCH set job_key='$2' where job_key='$1'"
+  sqle "update map.CSDATA set job_key='$2' where job_key='$1'"
+  sqle "update map.PDETLC set job_key='$2' where job_key='$1'"
+  sqle "update map.PDETLH set job_key='$2' where job_key='$1'"
+  sqle "update map.XDATA set k1_order='$2' where k1_order='$1'"
+  sqle "update map.XDATA set k2_order='$2' where k2_order='$1'"
+  sqle "update map.XDATA set k3_order='$2' where k3_order='$1'"
+}
+
+#}}}
+
 #}}}
 
 #### SVN GIT Mirroring {{{
