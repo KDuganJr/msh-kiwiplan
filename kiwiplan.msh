@@ -1217,4 +1217,18 @@ vmpassive() {
 	done
 }
 
+# Version Mirroring : Skip
+# vmskip 1 2 : Skip VM ID 1, moving lock on 1 directly to lock on 2, without vm 1 running
+vmskip() {
+        wt vmskip-$(vbc)
+	while true; do
+		if [[ -a /vmlock/$1.$(vbc) ]]; then
+			mv /vmlock/$1.$(vbc) /vmlock/$2.$(vbc)
+		else
+			echo VM is locked.. wait
+		fi
+		sleep 30
+	done
+}
+
 #}}}
