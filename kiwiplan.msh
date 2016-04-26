@@ -1169,6 +1169,7 @@ vmactive() {
 				vcap "After svn commit $message"
 			fi
       svnf st inf inv tss mapintegration pics | grep ^! | awk '{print " --force "$2}' | xargs svn rm
+			# TODO Looks like a local delete incoming delete tree conflict could happen here, which wouldn't be resolved by a svn up accept tf
 			svnf up inf inv tss mapintegration pics --force --accept tf
 			vcap "$(svnf log svn+ssh://corona2/svn/mapjava | head -2 | tail -1 | cut -d\| -f2 | cut -c2-)$(svnf log svn+ssh://corona2/svn/mapjava | head -4 | tail -1)"
 			mv /vmlock/$MSH_VM_ID.$(vbc) /vmlock/$MSH_VM_ID_NEXT.$(vbc)
