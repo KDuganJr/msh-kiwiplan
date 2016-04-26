@@ -1224,6 +1224,7 @@ vmskip() {
 	while true; do
 		if [[ -a /vmlock/$1.$(vbc) ]]; then
 			mv /vmlock/$1.$(vbc) /vmlock/$2.$(vbc)
+			echo VM lock moved from $1 to $2
 		else
 			echo VM is locked.. wait
 		fi
