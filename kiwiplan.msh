@@ -314,7 +314,7 @@ jr() {
 # Java Navigation {{{
 
 export JPJ_ROOT=~/projects
-export JPD=$(lnode $JPJ - 1)
+export JPD=$(lnode $JSV _ 1)
 MERGEREV=("all-8.14.1") export MERGEREV
 export JREV=$(e $JPJ | cut -c5-)
 export JHD=mes-8.0
