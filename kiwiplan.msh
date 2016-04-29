@@ -89,7 +89,7 @@ uds() {
 # cds maponly : Change the MAP data set
 cds() {
   wtl "Changing dataset"
-  crc CDS $(pwd) kiwiplan
+  mcv CDS $(pwd) kiwiplan
   rm /kiwi/data
   dl $(pwd)/MAP /kiwi/data
   if ls $(pwd)/MAP/*.sql; then
@@ -526,7 +526,7 @@ EOF
 jpj() {
   vue
   menu 'svn ls $SVN/projects | si master | s '$1' | sed "s/\///"'
-  crc JPJ $menu kiwiplan
+  mcv JPJ $menu kiwiplan
   if [[ -d $PJ_ROOT/$PJ ]]; then
     pj
   else
@@ -545,7 +545,7 @@ jsv() {
   sps
   vue
   menu 'svn ls $SVN/projects | si master | s '$1' | sed "s/\///"'
-  crc JSV $menu kiwiplan
+  mcv JSV $menu kiwiplan
   if ! sv; then
     jin
   fi
@@ -1055,9 +1055,9 @@ upmap() {
 # Change MAP rev
 maprev() {
   menu "echo 'boom_base\nboom_haoyang'"
-  crc MAP_REV_SRC $menu kiwiplan
+  mcv MAP_REV_SRC $menu kiwiplan
   menu "ssh $MAP_REV_SRC_SERVER ls -1d '$MAP_REV_SRC_DIR/kiwi_*' | sed 's/^.*kiwi_//g'"
-  crc MAP_REV $menu kiwiplan
+  mcv MAP_REV $menu kiwiplan
 	mr
   rm /kiwi/kiwilink
   if [[ ! -d /kiwi/revisions/kiwi_$menu ]]; then
@@ -1143,7 +1143,7 @@ vmactive() {
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git pull
-			if [[ $(svnf st inf inv tss mapintegration pics | wc -l) -gt 0 ]] && git log | head -8 | grep $MSH_VM_USER; then
+			if [[ $(svnf st inf inv tss mapintegration pics | wc -l) -gt 0 ]] && git log | head -4 | grep $MSH_VM_USER; then
 				message=$(git log | head -10 | tail -1 | cut -c5-)
 				if [[ $message != *SCM* ]]; then
 					echo Bad message STOP
@@ -1181,7 +1181,7 @@ vmpassive() {
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git pull || break
-			if [[ $(svnf st inf inv tss mapintegration pics | wc -l) -gt 0 ]] && git log | head -8 | grep $MSH_VM_USER; then
+			if [[ $(svnf st inf inv tss mapintegration pics | wc -l) -gt 0 ]] && git log | head -4 | grep $MSH_VM_USER; then
 				message=$(git log | head -10 | tail -1 | cut -c5-)
 				if [[ $message != *SCM* ]]; then
 					echo Bad message STOP
