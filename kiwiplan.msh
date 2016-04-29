@@ -93,9 +93,11 @@ cds() {
   rm /kiwi/data
   dl $(pwd)/MAP /kiwi/data
   if ls $(pwd)/MAP/*.sql; then
-		sqle "drop database map"
-		sqle "create database map"
+    svbur SQL_PREFIX
+		sqlrm map
+		sqlmk map
 		sql map < $(pwd)/MAP/*.sql
+    svpbr SQL_PREFIX
     KWSQL_FILE=$(pwd)/MAP/kwsql
     r $KWSQL_FILE
     e "DATA=map" >> $KWSQL_FILE
