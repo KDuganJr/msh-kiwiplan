@@ -27,6 +27,12 @@ _stp() {
 
 export DS=/KIWI/datasets
 
+# Selecting the development mode
+mode() {
+  menu "echo 'VUE\nMAP'"
+  mcv MODE $menu
+}
+
 # }}}
 
 # Data Set {{{
