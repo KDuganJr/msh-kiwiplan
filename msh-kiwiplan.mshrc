@@ -1,3 +1,6 @@
+# The kiwiplan development mode, either 'VUE' for Java development or 'MAP' for Fortran development
+export MSH_KIWIPLAN_MODE=VUE
+
 # The location of the dataset, which contains MAP/VUE subdirectories, see `cds` for more info
 export CDS=/KIWI/datasets/customer-x/site-x
 

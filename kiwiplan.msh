@@ -4,7 +4,7 @@
 # }}}
 
 #### Mode Trap {{{
-if [[ $MODE != "MAP" && $MODE != "VUE" ]]; then
+if [[ $MSH_KIWIPLAN_MODE != "MAP" && $MSH_KIWIPLAN_MODE != "VUE" ]]; then
 	return
 fi
 # }}}
@@ -15,7 +15,7 @@ fi
 # _stp : Show top prompt
 _stp() {
   _stp_id
-  e " $CYAN$(rnode $CDS \/ 1) $(rnode $CDS \/ 0)   $BLUE$(vt) | $MODE | $PJ   $GREEN $SV | $MAP_REV | $MAP_DATA_REV $FINISH"
+  e " $CYAN$(rnode $CDS \/ 1) $(rnode $CDS \/ 0)   $BLUE$(vt) | $MSH_KIWIPLAN_MODE | $PJ   $GREEN $SV | $MAP_REV | $MAP_DATA_REV $FINISH"
   _stp_command
 }
 
@@ -30,7 +30,7 @@ export DS=/KIWI/datasets
 # Selecting the development mode
 mode() {
   menu "echo 'VUE\nMAP'"
-  mcv MODE $menu
+  mcv MSH_KIWIPLAN_MODE $menu
 }
 
 # }}}
@@ -334,7 +334,7 @@ export CM_ROOT=/kiwi/java/comms
 export WK_ROOT=/kiwi/java/work
 export IN_ROOT=~/installers
 export JSVN="svn+ssh://corona2/svn/mapjava"
-if [[ $MODE == "VUE" ]]; then
+if [[ $MSH_KIWIPLAN_MODE == "VUE" ]]; then
   export SQL_PREFIX=${SITE_NAME}_
   export PJ_ROOT=$JPJ_ROOT
   export PJ=$JPJ
@@ -919,7 +919,7 @@ export MPJ=kiwi_riegelsville
 export MHD=kiwi_head
 export MMB=kiwi_riegelsville
 export MSVN="svn+ssh://corona2/svn/map"
-if [[ $MODE == "MAP" ]]; then
+if [[ $MSH_KIWIPLAN_MODE == "MAP" ]]; then
   export SQL_PREFIX=""
   export SVN=$MSVN
   export PJ_ROOT=$MPJ_ROOT
