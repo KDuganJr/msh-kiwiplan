@@ -1056,7 +1056,7 @@ upmap() {
 maprev() {
   menu "echo 'boom_base\nboom_haoyang'"
   mcv MAP_REV_SRC $menu kiwiplan
-  menu "ssh $MAP_REV_SRC_SERVER ls -1d '$MAP_REV_SRC_DIR/kiwi_*' | sed 's/^.*kiwi_//g'"
+  menu "ssh ssd@$MAP_REV_SRC_SERVER ls -1d '$MAP_REV_SRC_DIR/kiwi_*' | sed 's/^.*kiwi_//g'"
   mcv MAP_REV $menu kiwiplan
 	mr
   rm /kiwi/kiwilink
