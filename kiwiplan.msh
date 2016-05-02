@@ -393,6 +393,9 @@ ssse() {
 # Start java services
 sts() {
   pwd=$(pwd)
+  sv
+  d logs
+  r
   mwk
   evn $SV_ROOT/$SV/current/bin/startservers.sh
   o $pwd
