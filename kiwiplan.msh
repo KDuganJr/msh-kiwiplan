@@ -461,7 +461,9 @@ lg() {
 # Java Development: Log Error
 # lge : Tail logs and monitor for errors
 lge() {
-  d logs
+  if [[ -d logs ]]; then
+    d logs
+  fi
   sl exception
 }
 
