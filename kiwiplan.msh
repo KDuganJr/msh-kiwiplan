@@ -95,6 +95,7 @@ uds() {
 # cds maponly : Change the MAP data set
 cds() {
   wtl "Changing dataset"
+  sps
   mcv CDS $(pwd) kiwiplan
   rm /kiwi/data
   dl $(pwd)/MAP /kiwi/data
@@ -117,6 +118,7 @@ cds() {
   if [[ $1 != "maponly" ]]; then
     jdi $1
   fi
+  ss
   wtu "Changing dataset [DONE]"
 }
 
