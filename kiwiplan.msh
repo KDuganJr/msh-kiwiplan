@@ -768,7 +768,7 @@ jdp() {
 # below for svn
   #modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   if [[ $1 == "all" ]]; then
-    modified_projects=("${(@f)$(git diff $MSH_MAIN_BRANCH --name-status | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | cut -f2 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+    modified_projects=("${(@f)$(git diff $(vbcp) --name-status | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | cut -f2 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   else
     modified_projects=("${(@f)$(git status -s | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | cut -d " " -f3 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   fi
@@ -887,7 +887,7 @@ svnf() {
 }
 
 svn() {
-	if [[ $(vbc) != "vbc"* && $(vbc) != $MSH_MAIN_BRANCH ]]; then
+	if [[ $(vbc) != "vbc"* && $(vbc) != $(vbcp) ]]; then
 		echo Don\'t use svn in the $(vbc) branch
 	else
 		/usr/bin/svn $@
