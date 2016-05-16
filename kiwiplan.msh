@@ -1210,6 +1210,7 @@ vmpassive() {
 			svnf up $vmdirs --force --accept mf
 			git reset --hard
 			git clean -f
+			vsur
 			mv /vmlock/$MSH_VM_ID.$(vbc) /vmlock/$MSH_VM_ID_NEXT.$(vbc)
 		else
 			echo VM is locked.. wait
