@@ -978,6 +978,7 @@ rest() {
   r test$1
   d test$1/MAP
   scp -r "ssd@aurora:/mapqa/master_$MAP_DATA_REV/test$1/*" .
+  mapprofile
   d ..
   cds
 }
