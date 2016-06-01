@@ -398,6 +398,12 @@ sts() {
   sv
   d logs
   r
+  d ../conf/kiwiplan/jini/
+  debug_port=13066
+  for launchfile in *.xml; do
+    sed -i '/debugport/d' $launchfile; sed -i '/rmidport/a debugport="'$debug_port'"' $launchfile
+    (( debug_port++ ))
+  done
   mwk
   evn $SV_ROOT/$SV/current/bin/startservers.sh
   o $pwd
@@ -520,7 +526,7 @@ cmp() {
 # Java Debug: Debug Java service
 # jdb : Pick Java Service to debug
 jdb() {
-  pn jdb "ls $SV_ROOT/$SV/current/conf/kiwiplan/jini/*.xml"
+  grep debug $SV_ROOT/$SV/current/conf/kiwiplan/jini/*.xml
 }
 
 # Java Setup: Check out Java project
