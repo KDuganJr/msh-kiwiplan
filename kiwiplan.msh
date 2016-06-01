@@ -984,6 +984,7 @@ rest() {
   r test$1
   d test$1/MAP
   scp -r "ssd@aurora:/mapqa/master_$MAP_DATA_REV/test$1/*" .
+  mapprofile
   d ..
   cds
 }
@@ -1163,7 +1164,7 @@ vmactive() {
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git pull
-			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && git log | head -4 | grep $MSH_VM_USER; then
+			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | head -4 | grep $MSH_VM_USER || (git log | head -4 | grep melody && git log | head -11 | tail -1 | grep $MSH_VM_USER)); then
 				message=$(git log | head -10 | tail -1 | cut -c5-)
 				if [[ $message != *SCM* ]]; then
 					echo Bad message STOP
@@ -1204,7 +1205,7 @@ vmpassive() {
 			git reset --hard
 			vsur
 			git pull || break
-			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && git log | head -4 | grep $MSH_VM_USER; then
+			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | head -4 | grep $MSH_VM_USER || (git log | head -4 | grep melody && git log | head -11 | tail -1 | grep $MSH_VM_USER)); then
 				message=$(git log | head -10 | tail -1 | cut -c5-)
 				if [[ $message != *SCM* ]]; then
 					echo Bad message STOP
