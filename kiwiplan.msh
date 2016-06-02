@@ -1058,25 +1058,25 @@ PATH=$PATH:/kiwi/bin:/kiwi/progs
 
 # Update MAP rev
 upmap() {
-  cd /KIWI/revisions
+  d /kiwi/revisions
   if [[ -d kiwi_$MAP_REV ]]; then
     rm -rf kiwi_$MAP_REV.bak
     mv kiwi_$MAP_REV kiwi_$MAP_REV.bak
   fi
   mkdir kiwi_$MAP_REV
   cd kiwi_$MAP_REV
-  scp -r ssd@$MAP_REV_SRC_SERVER:$MAP_REV_SRC_DIR/kiwi_$MAP_REV/progs progs
-  scp -r ssd@$MAP_REV_SRC_SERVER:$MAP_REV_SRC_DIR/kiwi_$MAP_REV/scp scp
-  scp -r ssd@$MAP_REV_SRC_SERVER:$MAP_REV_SRC_DIR/kiwi_$MAP_REV/sql sql
-  scp -r ssd@$MAP_REV_SRC_SERVER:$MAP_REV_SRC_DIR/kiwi_$MAP_REV/etc etc
-  scp -r ssd@$MAP_REV_SRC_SERVER:$MAP_REV_SRC_DIR/kiwi_$MAP_REV/bin bin
+  scp -r $MAP_REV_SRC_SERVER:$MAP_REV_SRC_DIR/kiwi_$MAP_REV/progs progs
+  scp -r $MAP_REV_SRC_SERVER:$MAP_REV_SRC_DIR/kiwi_$MAP_REV/scp scp
+  scp -r $MAP_REV_SRC_SERVER:$MAP_REV_SRC_DIR/kiwi_$MAP_REV/sql sql
+  scp -r $MAP_REV_SRC_SERVER:$MAP_REV_SRC_DIR/kiwi_$MAP_REV/etc etc
+  scp -r $MAP_REV_SRC_SERVER:$MAP_REV_SRC_DIR/kiwi_$MAP_REV/bin bin
 }
 
 # Change MAP rev
 maprev() {
   menu "echo 'boom_base\nboom_haoyang'"
   mcv MAP_REV_SRC $menu kiwiplan
-  menu "ssh ssd@$MAP_REV_SRC_SERVER ls -1d '$MAP_REV_SRC_DIR/kiwi_*' | sed 's/^.*kiwi_//g'"
+  menu "ssh $MAP_REV_SRC_SERVER ls -1d '$MAP_REV_SRC_DIR/kiwi_*' | sed 's/^.*kiwi_//g'"
   mcv MAP_REV $menu kiwiplan
 	mr
   rm /kiwi/kiwilink
