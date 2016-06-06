@@ -1185,6 +1185,7 @@ vmactive() {
 		fi
 		sleep 30
 	done
+	wt
 }
 
 vmsvn() {
@@ -1223,6 +1224,7 @@ vmpassive() {
 		fi
 		sleep 30
 	done
+	wt
 }
 
 # Version Mirroring : Skip
@@ -1238,6 +1240,7 @@ vmskip() {
 		fi
 		sleep 30
 	done
+	wt
 }
 
 #}}}
