@@ -774,9 +774,9 @@ jdp() {
 # below for svn
   #modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   if [[ $1 == "all" ]]; then
-    modified_projects=("${(@f)$(git diff $(vbcp) --name-status | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | cut -f2 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+    modified_projects=("${(@f)$(git diff $(vbcp) --name-status | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | grep -v CONTRIBUTING | cut -f2 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   else
-    modified_projects=("${(@f)$(git status -s | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | cut -d " " -f3 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+    modified_projects=("${(@f)$(git status -s | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | grep -v CONTRIBUTING | cut -d " " -f3 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   fi
 	e
 	e Projects modified:
@@ -1160,7 +1160,7 @@ mrj() {
 
 vmactive() {
 	wt vmactive-$(vbc)
-	vmdirs=${(@f)$(ls | grep -v README | grep -v pom.xml | grep -v kp-parent)}
+	vmdirs=${(@f)$(ls | grep -v README | grep -v CONTRIBUTING | grep -v pom.xml | grep -v kp-parent)}
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git pull
@@ -1199,7 +1199,7 @@ vmsvn() {
 
 vmpassive() {
         wt vmpassive-$(vbc)
-	vmdirs=${(@f)$(ls | grep -v README | grep -v pom.xml | grep -v kp-parent)}
+	vmdirs=${(@f)$(ls | grep -v README | grep -v CONTRIBUTING | grep -v pom.xml | grep -v kp-parent)}
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git reset --hard
