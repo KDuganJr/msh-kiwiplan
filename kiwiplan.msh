@@ -585,7 +585,8 @@ jtst() {
 	fi
 }
 
-# Upgrade java services
+# Java Development : Upgrade java services
+# jup : Upgrade java services to the latest version
 jup() {
   sps
   jid
