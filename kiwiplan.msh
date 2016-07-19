@@ -967,8 +967,8 @@ export KIWIETC=/kiwi/etc
 export KIWIWORK=/kiwi/work
 export KIWISEA=$MDS:$KIWIPROGS:$KIWISQL:$KIWISCP:$KIWIBIN:$KIWIETC:$KIWIWORK
 export LD_LIBRARY_PATH=$KIWIPROGS
-export KWSQL_USER=root
-export KWSQL_PASS=root
+export KWSQL_USER=$MSH_SQL_USER
+export KWSQL_PASS=$MSH_SQL_PASS
 
 
 alias map="mode <<< 2"
