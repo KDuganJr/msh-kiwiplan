@@ -1246,3 +1246,52 @@ vmskip() {
 }
 
 #}}}
+
+#### Auto Deploy {{{
+
+autojup() {
+	setopt localoptions rmstarsilent
+	while true; do
+		date +%H
+		if [[ $(date +%H) == 06 ]]; then
+			jup
+			re
+
+			sv
+			chmod 777 -R .
+			d ..
+			for svrev in *; do
+				if [[ $svrev != "current" && $svrev != $(rnode $(ls -l current | ac 11) / 0) ]]; then
+					r $svrev;
+				fi;
+			done
+
+			tc
+			chmod 777 -R .
+			d ..
+			for svrev in *; do
+				if [[ $svrev != "current" && $svrev != $(rnode $(ls -l current | ac 11) / 0) ]]; then
+					r $svrev;
+				fi;
+			done
+			e Upgraded
+		fi
+		sleep 3600
+	done
+}
+
+ssmonitor() {
+	export LANG=en_US.UTF-8
+	while true; do
+		if [[ -a /vmlock/ssrequest ]]; then
+			e ssrequest found
+			ss
+			r /vmlock/ssrequest
+			e ss complete
+		fi
+		sss
+		sleep 60
+	done
+}
+
+#}}}
