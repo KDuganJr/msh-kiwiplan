@@ -1166,8 +1166,8 @@ vmactive() {
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git pull
-			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | head -4 | grep $MSH_VM_USER || (git log | head -4 | grep melody && git log | head -11 | tail -1 | grep $MSH_VM_USER)); then
-				message=$(git log | head -10 | tail -1 | cut -c5-)
+			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | s ^Merge: -B1 -A11 | head -4 | grep $MSH_VM_USER || (git log | s ^Merge: -B1 -A11 | head -4 | grep melody && git log | s ^Merge: -B1 -A11 | head -11 | tail -1 | grep $MSH_VM_USER)); then
+				message=$(git log | s ^Merge: -B1 -A11 | head -10 | tail -1 | cut -c5-)
 				if [[ $message != *SCM* ]]; then
 					echo Bad message STOP
 					break
@@ -1208,8 +1208,8 @@ vmpassive() {
 			git reset --hard
 			vsur
 			git pull || break
-			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | head -4 | grep $MSH_VM_USER || (git log | head -4 | grep melody && git log | head -11 | tail -1 | grep $MSH_VM_USER)); then
-				message=$(git log | head -10 | tail -1 | cut -c5-)
+			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | s ^Merge: -B1 -A11 | head -4 | grep $MSH_VM_USER || (git log | s ^Merge: -B1 -A11 | head -4 | grep melody && git log | s ^Merge: -B1 -A11 | head -11 | tail -1 | grep $MSH_VM_USER)); then
+				message=$(git log | s ^Merge: -B1 -A11 | head -10 | tail -1 | cut -c5-)
 				if [[ $message != *SCM* ]]; then
 					echo Bad message STOP
 					break
