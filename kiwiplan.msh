@@ -795,16 +795,29 @@ jdp() {
 	e ENTER to proceed, C-c to cancel
 	e
 	read
+  wt jdp
+  jdp_failed=false
 	for project in $modified_projects; do
 		pj
 		cd $project
 		dp
     if [[ $? -gt 0 ]]; then
-      e BUILD FAILED !!!!
+      e
+      e -------------------------------
+      e
+      e ${RED}BUILD FAILED !!!!${FINISH}
+      e
+      e -------------------------------
+      e
+      jdp_failed=true
+      wtu jdp[FAILED]
       break
     fi
 	done
-	ss
+  if ! $jdp_failed; then
+    ss
+    wtu jdp[DONE]
+  fi
 }
 
 jdpa() {
