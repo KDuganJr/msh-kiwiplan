@@ -799,6 +799,10 @@ jdp() {
 		pj
 		cd $project
 		dp
+    if [[ $? -gt 0 ]]; then
+      e BUILD FAILED !!!!
+      break
+    fi
 	done
 	ss
 }
