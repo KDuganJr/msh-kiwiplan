@@ -1245,6 +1245,18 @@ vmskip() {
 	wt
 }
 
+vmdev() {
+	while true; do
+		vb 8.40
+		vu
+		vb dev
+		vu
+		git merge --no-edit 8.40
+		vp
+		sleep 60
+	done
+}
+
 #}}}
 
 #### Auto Deploy {{{
