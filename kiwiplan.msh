@@ -1214,7 +1214,7 @@ vmactive() {
 }
 
 vmsvn() {
-	r kp-parent inf inv mapintegration manufacturing-classic tss tss-clasic pics
+	r kp-parent inf inv mapintegration manufacturing-classic tss tss-classic pics
 	svnf co $SVN/kp-parent/branches/$1 kp-parent
 	svnf co $SVN/inf/branches/$1 inf
 	svnf co $SVN/inv/branches/$1 inv
