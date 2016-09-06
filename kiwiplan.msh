@@ -368,11 +368,6 @@ cm() {
   o $CM_ROOT/$SV
 }
 
-# Go to java installer directory
-in() {
-  o $IN_ROOT/$JIN
-}
-
 # Go to java work directory
 wk() {
   o $WK_ROOT/$SV
@@ -438,12 +433,10 @@ ssc() {
 }
 
 
-# Go to java installers directory
+# Java Development : Installer Directory
+# jind : Go to java installer directory
 jind() {
-  o $IN_ROOT
-  if [[ -d $SITE_NAME ]]; then
-    o $SITE_NAME
-  fi
+  d $IN_ROOT/$JIN
 }
 
 # rmsite : Removes current java revision installation
@@ -605,13 +598,13 @@ EOF
 # Java Development : Download Installer
 # jid : Download the latest installer
 jid() {
-  d $IN_ROOT/$JIN
+  jind
   rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JIN | sed "s/-[^-]*$//")/ . $JIN'-*'
   cplic $JPD
 }
 
 jwid() {
-  d $IN_ROOT/$JSV
+  jind
   if [[ -d windows ]]; then
     rm -rf windows
   fi
@@ -1216,12 +1209,14 @@ vmactive() {
 }
 
 vmsvn() {
-	r kp-parent inf inv mapintegration tss pics
+	r kp-parent inf inv mapintegration manufacturing-classic tss tss-classic pics
 	svnf co $SVN/kp-parent/branches/$1 kp-parent
 	svnf co $SVN/inf/branches/$1 inf
 	svnf co $SVN/inv/branches/$1 inv
 	svnf co $SVN/mapintegration/branches/$1 mapintegration
+	svnf co $SVN/manufacturing-classic/branches/$1 manufacturing-classic
 	svnf co $SVN/tss/branches/$1 tss
+	svnf co $SVN/tss-classic/branches/$1 tss-classic
 	svnf co $SVN/pics/branches/$1 pics
 }
 
@@ -1268,6 +1263,18 @@ vmskip() {
 		sleep 30
 	done
 	wt
+}
+
+vmdev() {
+	while true; do
+		vb 8.40
+		vu
+		vb dev
+		vu
+		git merge --no-edit 8.40
+		vp
+		sleep 60
+	done
 }
 
 #}}}
