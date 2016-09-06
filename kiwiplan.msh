@@ -596,12 +596,19 @@ EOF
 }
 
 # Java Development : Download Installer
-# jid : Download the latest installer
-jid() {
-  jind
-  rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JIN | sed "s/-[^-]*$//")/ . $JIN'-*'
-  cplic $JPD
-}
+ # jid : Download the latest installer
+ # jid mes-8.31.1 : Download the latest installer for 8.31.1
+ jid() {
+   if [[ $1 == "" ]]; then
+     jind
+     rev=$JIN
+   else
+     d $IN_ROOT/$rev
+     rev=$1
+   fi
+   rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $rev | sed "s/-[^-]*$//")/ . $rev'-*'
+   cplic $JPD
+  }
 
 jwid() {
   jind
