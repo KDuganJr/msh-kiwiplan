@@ -986,6 +986,7 @@ rest() {
   d test$1/MAP
   scp -r "ssd@aurora:/mapqa/master_$MAP_DATA_REV/test$1/*" .
   mapprofile
+  r upgrade.da.sql
   d ..
   cds
 }
@@ -1089,7 +1090,7 @@ maprev() {
 }
 
 mapprofile() {
-	echo TERMINAL:vt100 > PROFILE
+	echo TERMINAL:vt100 >> PROFILE
 }
 
 # Change MAP rev for dataset restores
