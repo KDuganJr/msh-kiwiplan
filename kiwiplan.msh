@@ -368,11 +368,6 @@ cm() {
   o $CM_ROOT/$SV
 }
 
-# Go to java installer directory
-in() {
-  o $IN_ROOT/$JIN
-}
-
 # Go to java work directory
 wk() {
   o $WK_ROOT/$SV
@@ -438,12 +433,10 @@ ssc() {
 }
 
 
-# Go to java installers directory
+# Java Development : Installer Directory
+# jind : Go to java installer directory
 jind() {
-  o $IN_ROOT
-  if [[ -d $SITE_NAME ]]; then
-    o $SITE_NAME
-  fi
+  d $IN_ROOT/$JIN
 }
 
 # rmsite : Removes current java revision installation
@@ -605,13 +598,13 @@ EOF
 # Java Development : Download Installer
 # jid : Download the latest installer
 jid() {
-  d $IN_ROOT/$JIN
+  jind
   rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JIN | sed "s/-[^-]*$//")/ . $JIN'-*'
   cplic $JPD
 }
 
 jwid() {
-  d $IN_ROOT/$JSV
+  jind
   if [[ -d windows ]]; then
     rm -rf windows
   fi
@@ -770,12 +763,18 @@ jdpw() {
   deploy --nojar
 }
 
+# Java : Deploy
+# jdp : Deploy all uncommitted changes
+# jdp all : Deploy all changes that differ from the parent branch
+# jdp <branch> : Deploy all changes that differ from the <branch> branch
 jdp() {
 	pj
 # below for svn
   #modified_projects=("${(@f)$(svnf st | grep "^[A-Z] " | grep -v ^X | grep -v sqlsrc | cut -d " " -f8 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   if [[ $1 == "all" ]]; then
     modified_projects=("${(@f)$(git diff $(vbcp) --name-status | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v .gitignore | grep -v README | grep -v CONTRIBUTING | cut -f2 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
+  elif [[ $1 != "" ]]; then
+    modified_projects=("${(@f)$(git diff $1 --name-status | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v .gitignore | grep -v README | grep -v CONTRIBUTING | cut -f2 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   else
     modified_projects=("${(@f)$(git status -s | grep -v sqlsrc | grep -v conf | grep -v pom.xml | grep -v README | grep -v .gitignore | grep -v CONTRIBUTING | cut -d " " -f3 | sed "s/src.*//g" | sed "s/war.*//g" | sed "s/test$//g" | sed "s/conf.*//g" | sed "s/pom.xml//g" | sed "s/file.*//g" | sort | uniq)}")
   fi
@@ -789,12 +788,29 @@ jdp() {
 	e ENTER to proceed, C-c to cancel
 	e
 	read
+  wt jdp
+  jdp_failed=false
 	for project in $modified_projects; do
 		pj
 		cd $project
 		dp
+    if [[ $? -gt 0 ]]; then
+      e
+      e -------------------------------
+      e
+      e ${RED}BUILD FAILED !!!!${FINISH}
+      e
+      e -------------------------------
+      e
+      jdp_failed=true
+      wtu jdp[FAILED]
+      break
+    fi
 	done
-	ss
+  if ! $jdp_failed; then
+    ss
+    wtu jdp[DONE]
+  fi
 }
 
 jdpa() {
@@ -945,7 +961,7 @@ fi
 
 case $MAP_REV_SRC in
 boom_base)
-  export MAP_REV_SRC_SERVER=nzboom
+  export MAP_REV_SRC_SERVER=nzboom.kiwiplan.co.nz
   export MAP_REV_SRC_DIR=/src
   ;;
 boom_haoyang)
@@ -967,8 +983,8 @@ export KIWIETC=/kiwi/etc
 export KIWIWORK=/kiwi/work
 export KIWISEA=$MDS:$KIWIPROGS:$KIWISQL:$KIWISCP:$KIWIBIN:$KIWIETC:$KIWIWORK
 export LD_LIBRARY_PATH=$KIWIPROGS
-export KWSQL_USER=root
-export KWSQL_PASS=root
+export KWSQL_USER=$MSH_SQL_USER
+export KWSQL_PASS=$MSH_SQL_PASS
 
 
 alias map="mode <<< 2"
@@ -1167,8 +1183,8 @@ vmactive() {
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git pull
-			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | head -4 | grep $MSH_VM_USER || (git log | head -4 | grep melody && git log | head -11 | tail -1 | grep $MSH_VM_USER)); then
-				message=$(git log | head -10 | tail -1 | cut -c5-)
+			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | s ^Merge: -B1 -A11 | head -4 | grep $MSH_VM_USER || (git log | s ^Merge: -B1 -A11 | head -4 | grep melody && git log | s ^Merge: -B1 -A11 | head -11 | tail -1 | grep $MSH_VM_USER)); then
+				message=$(git log | s ^Merge: -B1 -A11 | head -10 | tail -1 | cut -c5-)
 				if [[ $message != *SCM* ]]; then
 					echo Bad message STOP
 					break
@@ -1192,12 +1208,14 @@ vmactive() {
 }
 
 vmsvn() {
-	r kp-parent inf inv mapintegration tss pics
+	r kp-parent inf inv mapintegration manufacturing-classic tss tss-classic pics
 	svnf co $SVN/kp-parent/branches/$1 kp-parent
 	svnf co $SVN/inf/branches/$1 inf
 	svnf co $SVN/inv/branches/$1 inv
 	svnf co $SVN/mapintegration/branches/$1 mapintegration
+	svnf co $SVN/manufacturing-classic/branches/$1 manufacturing-classic
 	svnf co $SVN/tss/branches/$1 tss
+	svnf co $SVN/tss-classic/branches/$1 tss-classic
 	svnf co $SVN/pics/branches/$1 pics
 }
 
@@ -1209,8 +1227,8 @@ vmpassive() {
 			git reset --hard
 			vsur
 			git pull || break
-			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | head -4 | grep $MSH_VM_USER || (git log | head -4 | grep melody && git log | head -11 | tail -1 | grep $MSH_VM_USER)); then
-				message=$(git log | head -10 | tail -1 | cut -c5-)
+			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | s ^Merge: -B1 -A11 | head -4 | grep $MSH_VM_USER || (git log | s ^Merge: -B1 -A11 | head -4 | grep melody && git log | s ^Merge: -B1 -A11 | head -11 | tail -1 | grep $MSH_VM_USER)); then
+				message=$(git log | s ^Merge: -B1 -A11 | head -10 | tail -1 | cut -c5-)
 				if [[ $message != *SCM* ]]; then
 					echo Bad message STOP
 					break
@@ -1244,6 +1262,18 @@ vmskip() {
 		sleep 30
 	done
 	wt
+}
+
+vmdev() {
+	while true; do
+		vb 8.40
+		vu
+		vb dev
+		vu
+		git merge --no-edit 8.40
+		vp
+		sleep 60
+	done
 }
 
 #}}}
