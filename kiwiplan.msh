@@ -474,7 +474,7 @@ lge() {
 # Start tomcat debug
 dbt() {
   pk catalina
-  export JPDA_ADDRESS=13067
+  export JPDA_ADDRESS=13066
   export JPDA_TRANSPORT=dt_socket
   tc
   bin/catalina.sh jpda run
