@@ -368,11 +368,6 @@ cm() {
   o $CM_ROOT/$SV
 }
 
-# Go to java installer directory
-in() {
-  o $IN_ROOT/$JIN
-}
-
 # Go to java work directory
 wk() {
   o $WK_ROOT/$SV
@@ -438,12 +433,10 @@ ssc() {
 }
 
 
-# Go to java installers directory
+# Java Development : Installer Directory
+# jind : Go to java installer directory
 jind() {
-  o $IN_ROOT
-  if [[ -d $SITE_NAME ]]; then
-    o $SITE_NAME
-  fi
+  d $IN_ROOT/$JIN
 }
 
 # rmsite : Removes current java revision installation
@@ -481,7 +474,7 @@ lge() {
 # Start tomcat debug
 dbt() {
   pk catalina
-  export JPDA_ADDRESS=13067
+  export JPDA_ADDRESS=13066
   export JPDA_TRANSPORT=dt_socket
   tc
   bin/catalina.sh jpda run
@@ -592,7 +585,7 @@ jup() {
   jid
 
 # Run installation
-  ./$JIN-*.sh << EOF
+  ./$JIN*.sh << EOF
 
 $SITE_NAME
 
@@ -605,13 +598,13 @@ EOF
 # Java Development : Download Installer
 # jid : Download the latest installer
 jid() {
-  d $IN_ROOT/$JIN
-  rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JIN | sed "s/-[^-]*$//")/ . $JIN'-*'
+  jind
+  rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JIN | sed "s/-[^-]*$//")/ . $JIN'*'
   cplic $JPD
 }
 
 jwid() {
-  d $IN_ROOT/$JSV
+  jind
   if [[ -d windows ]]; then
     rm -rf windows
   fi
@@ -834,6 +827,7 @@ jdpa() {
 
 jdpainv() {
   pj
+  jats
   o inf
   o kp-native-api
   dp || return
@@ -1009,6 +1003,7 @@ rest() {
   d test$1/MAP
   scp -r "ssd@aurora:/mapqa/master_$MAP_DATA_REV/test$1/*" .
   mapprofile
+  r upgrade.da.sql
   d ..
   cds
 }
@@ -1112,7 +1107,7 @@ maprev() {
 }
 
 mapprofile() {
-	echo TERMINAL:vt100 > PROFILE
+	echo TERMINAL:vt100 >> PROFILE
 }
 
 # Change MAP rev for dataset restores
@@ -1318,11 +1313,12 @@ autojup() {
 }
 
 ssmonitor() {
-	export LANG=en_US.UTF-8
 	while true; do
 		if [[ -a /vmlock/ssrequest ]]; then
 			e ssrequest found
-			ss
+			pj
+			vu
+			jdpainv
 			r /vmlock/ssrequest
 			e ss complete
 		fi
