@@ -585,7 +585,7 @@ jup() {
   jid
 
 # Run installation
-  ./$JIN-*.sh << EOF
+  ./$JIN*.sh << EOF
 
 $SITE_NAME
 
@@ -599,7 +599,7 @@ EOF
 # jid : Download the latest installer
 jid() {
   jind
-  rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JIN | sed "s/-[^-]*$//")/ . $JIN'-*'
+  rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JIN | sed "s/-[^-]*$//")/ . $JIN'*'
   cplic $JPD
 }
 
