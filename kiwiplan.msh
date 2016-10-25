@@ -997,7 +997,7 @@ rest() {
   d rest
   r test$1
   d test$1/MAP
-  scp -r "ssd@aurora:/mapqa/master_$MAP_DATA_REV/test$1/*" .
+  scp -r "ssd@nzdawn:/mapqa/master_$MAP_DATA_REV/test$1/*" .
   mapprofile
   r upgrade.da.sql
   d ..
@@ -1008,7 +1008,7 @@ rest() {
 restsql() {
   DIR=$DS/rest/$MAP_DATA_REV
   if [[ ! -f $DIR/test$1.sql ]]; then
-    scp ssd@aurora:/mapqa/master_$MAP_DATA_REV/test$1.sql $DIR
+    scp ssd@nzdawn:/mapqa/master_$MAP_DATA_REV/test$1.sql $DIR
   fi
   lndata $DIR/test$1.sql
 }
@@ -1108,9 +1108,8 @@ mapprofile() {
 
 # Change MAP rev for dataset restores
 mapdatarev() {
-  menu "ssh ssd@felix ls -1d '/mapqa/master_*' | cut -d _ -f 2"
-  sed -i -r 's/^export MAP_DATA_REV.*$/export MAP_DATA_REV='$menu'/gi' $ZSHRC
-  source $ZSHRC
+  menu "ssh ssd@nzdawn ls -1d '/mapqa/master_*' | cut -d _ -f 2"
+  mcv MAP_DATA_REV $menu kiwiplan
 }
 
 # MAP Setup: MAP Work Cleanup
