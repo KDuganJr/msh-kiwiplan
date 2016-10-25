@@ -1011,7 +1011,7 @@ rest() {
   r restjava.conf
   cp ./conf/kiwiplan/time.properties .
   r conf
-  if [[ -a manufacturing.sql ]]; then m manufacturing.sql ${SQL_PREFIX}man.sql; fi
+  if [[ -a manufacturing.sql ]]; then m manufacturing.sql ${SQL_PREFIX}mapman.sql; fi
   if [[ -a tss.sql ]]; then m tss.sql ${SQL_PREFIX}tss.sql; fi
   d ..
 
