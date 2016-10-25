@@ -15,7 +15,7 @@ fi
 # _stp : Show top prompt
 _stp() {
   _stp_id
-  e " $CYAN$(rnode $CDS \/ 1) $(rnode $CDS \/ 0)   $BLUE$(vt) | $MSH_KIWIPLAN_MODE | $PJ   $GREEN $SV | $MAP_REV | $MAP_DATA_REV $FINISH"
+  e " $CYAN$(rnode $CDS \/ 1) $(rnode $CDS \/ 0)   $BLUE$MSH_KIWIPLAN_MODE | $PJ   $GREEN $SV | $JIN | $MAP_REV | $MAP_DATA_REV $FINISH"
   _stp_command
 }
 
@@ -326,7 +326,7 @@ jr() {
 export JPJ_ROOT=~/projects
 export JPD=$(lnode $JSV _ 1)
 MERGEREV=("all-8.14.1") export MERGEREV
-export JREV=$(e $JPJ | cut -c5-)
+export JREV=$(e $JIN | cut -c5-)
 export JHD=mes-8.0
 export JMB=mes-8.0
 export SITE_NAME=$JSV
@@ -991,16 +991,30 @@ mwk() {
   d $KIWIWORK
 }
 
-# Restore MAP QA ISAM dataset
+# Restore MAP QA ISAM dataset + VUE dataset
 rest() {
   ds
   d rest
   r test$1
+
+# Restore MAP dataset
   d test$1/MAP
   scp -r "ssd@nzdawn:/mapqa/master_$MAP_DATA_REV/test$1/*" .
   mapprofile
   r upgrade.da.sql
   d ..
+
+# Restore VUE dataset
+  d VUE
+  scp ssd@nzdawn:/mapqa/master_$JREV/$1.tar.gz .
+  uz $1.tar.gz
+  r restjava.conf
+  cp ./conf/kiwiplan/time.properties .
+  r conf
+  if [[ -a manufacturing.sql ]]; then m manufacturing.sql ${SQL_PREFIX}man.sql; fi
+  if [[ -a tss.sql ]]; then m tss.sql ${SQL_PREFIX}tss.sql; fi
+  d ..
+
   cds
 }
 
