@@ -827,6 +827,7 @@ jdpa() {
 
 jdpainv() {
   pj
+  jats
   o inf
   o kp-native-api
   dp || return
@@ -1312,11 +1313,12 @@ autojup() {
 }
 
 ssmonitor() {
-	export LANG=en_US.UTF-8
 	while true; do
 		if [[ -a /vmlock/ssrequest ]]; then
 			e ssrequest found
-			ss
+			pj
+			vu
+			jdpainv
 			r /vmlock/ssrequest
 			e ss complete
 		fi
