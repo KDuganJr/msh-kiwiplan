@@ -585,7 +585,7 @@ jup() {
   jid
 
 # Run installation
-  ./$JIN-*.sh << EOF
+  ./$JIN*.sh << EOF
 
 $SITE_NAME
 
@@ -596,19 +596,12 @@ EOF
 }
 
 # Java Development : Download Installer
- # jid : Download the latest installer
- # jid mes-8.31.1 : Download the latest installer for 8.31.1
- jid() {
-   if [[ $1 == "" ]]; then
-     jind
-     rev=$JIN
-   else
-     d $IN_ROOT/$rev
-     rev=$1
-   fi
-   rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $rev | sed "s/-[^-]*$//")/ . $rev'-*'
-   cplic $JPD
-  }
+# jid : Download the latest installer
+jid() {
+  jind
+  rmu 'installers@nzjenkins:/data/installers/latestsingleinstaller/'$(echo $JIN | sed "s/-[^-]*$//")/ . $JIN'*'
+  cplic $JPD
+}
 
 jwid() {
   jind
@@ -836,6 +829,7 @@ jdpa() {
 
 jdpainv() {
   pj
+  jats
   o inf
   o kp-native-api
   dp || return
@@ -929,7 +923,7 @@ svn() {
 # (Kiwiplan) Version Control : Branch Merge Commit
 # vbmc 7.72 8399 : Merge r8399 from branch 7.72 to the working copy
 vbmc() {
-	svn merge -c $2 $(svn info | s ^URL | cut -d " " -f 2 | sed -r 's/branches\/[^\/]*/branches\/'$1'/')
+	svnf merge -c $2 $(svnf info | s ^URL | cut -d " " -f 2 | sed -r 's/branches\/[^\/]*/branches\/'$1'/')
 }
 vbmcinv() {
   o inv
@@ -1275,11 +1269,11 @@ vmskip() {
 
 vmdev() {
 	while true; do
-		vb 8.40
+		vb 8.41.1
 		vu
 		vb dev
 		vu
-		git merge --no-edit 8.40
+		git merge --no-edit 8.41.1
 		vp
 		sleep 60
 	done
@@ -1321,11 +1315,12 @@ autojup() {
 }
 
 ssmonitor() {
-	export LANG=en_US.UTF-8
 	while true; do
 		if [[ -a /vmlock/ssrequest ]]; then
 			e ssrequest found
-			ss
+			pj
+			vu
+			jdpainv
 			r /vmlock/ssrequest
 			e ss complete
 		fi
