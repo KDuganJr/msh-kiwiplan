@@ -965,10 +965,6 @@ boom_base)
   export MAP_REV_SRC_SERVER=nzboom.kiwiplan.co.nz
   export MAP_REV_SRC_DIR=/src
   ;;
-boom_haoyang)
-  export MAP_REV_SRC_SERVER=nzboom
-  export MAP_REV_SRC_DIR=~/projects
-  ;;
 aurora)
   export MAP_REV_SRC_SERVER=aurora
   export MAP_REV_SRC_DIR=/src
@@ -1094,7 +1090,7 @@ upmap() {
 
 # Change MAP rev
 maprev() {
-  menu "echo 'boom_base\nboom_haoyang'"
+  menu "echo 'boom_base\naurora'"
   mcv MAP_REV_SRC $menu kiwiplan
   menu "ssh ssd@$MAP_REV_SRC_SERVER ls -1d '$MAP_REV_SRC_DIR/kiwi_*' | sed 's/^.*kiwi_//g'"
   mcv MAP_REV $menu kiwiplan
