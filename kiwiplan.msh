@@ -1208,7 +1208,11 @@ vmactive() {
 			# TODO Looks like a local delete incoming delete tree conflict could happen here, which wouldn't be resolved by a svn up accept tf
 			svnf up $vmdirs --force --accept tf
 			vcap "$(svnf log svn+ssh://corona2/svn/mapjava | head -2 | tail -1 | cut -d\| -f2 | cut -c2-)$(svnf log svn+ssh://corona2/svn/mapjava | head -4 | tail -1)"
-			mv /vmlock/$MSH_VM_ID.$(vbc) /vmlock/$MSH_VM_ID_NEXT.$(vbc)
+			if [[ $MSH_VM_ID == $MSH_VM_ID_NEXT ]]; then
+				touch /vmlock/$MSH_VM_ID.$(vbc)
+			else
+				mv /vmlock/$MSH_VM_ID.$(vbc) /vmlock/$MSH_VM_ID_NEXT.$(vbc)
+			fi
 		else
 			echo VM is locked.. wait
 		fi
