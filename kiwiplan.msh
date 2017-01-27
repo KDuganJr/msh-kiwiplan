@@ -322,7 +322,7 @@ dpw() {
 }
 
 hotjs() {
-  fw . dpw
+  fw war dpw
 }
 
 jr() {
