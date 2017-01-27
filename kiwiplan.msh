@@ -317,6 +317,14 @@ dp() {
   deploy
 }
 
+dpw() {
+  deploy -nojar
+}
+
+hotjs() {
+  fw . dpw
+}
+
 jr() {
   jrebel
 }
