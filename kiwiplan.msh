@@ -770,6 +770,8 @@ jdt() {
   cat $COMMON/haoyang/trim.log | sed "s/SITE_NAME/$SITE_NAME/" >> conf/log4j.properties
 }
 
+# Java : Deploy Web
+# jdpw : Deploys the web components in the forklift module
 jdpw() {
   pj
   o inv
