@@ -168,6 +168,12 @@ vult() {
   ssh nzvult
 }
 
+# Server : Gotham
+# gotham : SSH to the gotham server as bruce (super user)
+gotham() {
+  ssh bruce@nzgotham
+}
+
 # Login to nzboom
 # If $1 is defined then upload the file to nzboom shared folder
 boom() {
@@ -1189,7 +1195,7 @@ mrj() {
 
 vmactive() {
 	wt vmactive-$(vbc)
-	vmdirs=${(@f)$(ls | grep -v README | grep -v CONTRIBUTING | grep -v pom.xml | grep -v kp-parent)}
+	vmdirs=${(@f)$(ls | grep -v README | grep -v CONTRIBUTING | grep -v pom.xml | grep -v kp-parent | grep -v tests)}
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git pull
@@ -1235,7 +1241,7 @@ vmsvn() {
 
 vmpassive() {
         wt vmpassive-$(vbc)
-	vmdirs=${(@f)$(ls | grep -v README | grep -v CONTRIBUTING | grep -v pom.xml | grep -v kp-parent)}
+	vmdirs=${(@f)$(ls | grep -v README | grep -v CONTRIBUTING | grep -v pom.xml | grep -v kp-parent | grep -v tests)}
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git reset --hard
