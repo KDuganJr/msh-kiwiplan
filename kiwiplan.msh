@@ -1280,11 +1280,11 @@ vmskip() {
 
 vmdev() {
 	while true; do
-		vb 8.41.1
+		vb master
 		vu
 		vb dev
 		vu
-		git merge --no-edit 8.41.1
+		git merge --no-edit master
 		vp
 		sleep 60
 	done
