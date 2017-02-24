@@ -1033,6 +1033,15 @@ restsql() {
   lndata $DIR/test$1.sql
 }
 
+# MAP database reset/restore
+# mdsr : restore MAP database
+mdsr() {
+  mds
+  d ..
+  r MAP
+  cp -r MAP.bak MAP
+}
+
 
 jip() {
   mwk
