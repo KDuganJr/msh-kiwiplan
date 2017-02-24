@@ -323,6 +323,14 @@ dp() {
   deploy
 }
 
+dpw() {
+  deploy -nojar
+}
+
+hotjs() {
+  fw war dpw
+}
+
 jr() {
   jrebel
 }
@@ -762,6 +770,8 @@ jdt() {
   cat $COMMON/haoyang/trim.log | sed "s/SITE_NAME/$SITE_NAME/" >> conf/log4j.properties
 }
 
+# Java : Deploy Web
+# jdpw : Deploys the web components in the forklift module
 jdpw() {
   pj
   o inv
@@ -1210,7 +1220,7 @@ vmactive() {
 			git pull
 			if [[ $(svnf st $vmdirs | wc -l) -gt 0 ]] && (git log | s ^Merge: -B1 -A11 | head -4 | grep $MSH_VM_USER || (git log | s ^Merge: -B1 -A11 | head -4 | grep melody && git log | s ^Merge: -B1 -A11 | head -11 | tail -1 | grep $MSH_VM_USER)); then
 				message=$(git log | s ^Merge: -B1 -A11 | head -10 | tail -1 | cut -c5-)
-				if [[ $message != *SCM* ]]; then
+				if [[ $message != *SCM* && $message != *WEB_COMPONENTS* ]]; then
 					echo Bad message STOP
 					break
 				fi
