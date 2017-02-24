@@ -1204,7 +1204,7 @@ mrj() {
 
 vmactive() {
 	wt vmactive-$(vbc)
-	vmdirs=${(@f)$(ls | grep -v README | grep -v CONTRIBUTING | grep -v pom.xml | grep -v kp-parent)}
+	vmdirs=${(@f)$(ls | grep -v README | grep -v CONTRIBUTING | grep -v pom.xml | grep -v kp-parent | grep -v tests)}
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git pull
@@ -1250,7 +1250,7 @@ vmsvn() {
 
 vmpassive() {
         wt vmpassive-$(vbc)
-	vmdirs=${(@f)$(ls | grep -v README | grep -v CONTRIBUTING | grep -v pom.xml | grep -v kp-parent)}
+	vmdirs=${(@f)$(ls | grep -v README | grep -v CONTRIBUTING | grep -v pom.xml | grep -v kp-parent | grep -v tests)}
 	while true; do
 		if [[ -a /vmlock/$MSH_VM_ID.$(vbc) ]]; then
 			git reset --hard
@@ -1295,11 +1295,11 @@ vmskip() {
 
 vmdev() {
 	while true; do
-		vb 8.41.1
+		vb master
 		vu
 		vb dev
 		vu
-		git merge --no-edit 8.41.1
+		git merge --no-edit master
 		vp
 		sleep 60
 	done
