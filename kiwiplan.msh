@@ -57,7 +57,7 @@ uds() {
 	md $dspath
 	cp $1 $dspath/$1.tar
 	d $dspath
-	uz $1.tar
+	uz *
 	uz *
 
 # Logs
@@ -70,9 +70,9 @@ uds() {
 # MAP
 	mmd *classic* MAP
 	d MAP
-#  m * map.sql
- m * "*.tar"
- uz *
+  m * map.sql
+# m * "*.tar" TODO sql or tar
+ # uz * TODO
   mapprofile
   d ..
 
@@ -80,8 +80,8 @@ uds() {
 	mmd *.dump VUE
   mv time.properties VUE
 	d VUE
-	mtp * '$SQL_PREFIX$(lnode $f . 1).sql'
-	mtp *man* '$(echo $f | ts man mapman)'
+	mtp * '$SQL_PREFIX$(lnode $f . 2).sql' # TODO Could be 1 or 2 etc
+	# mtp *man* '$(echo $f | ts man mapman)' # TODO Could be mapman
 	d ..
 
 	wtu
@@ -1170,6 +1170,13 @@ mwc() {
   rm *.out
   rm core
   rm SQLERROR.*
+}
+
+# Deploy MAP libjavamap.so from boom
+# mdp scm232990_8.51dev : Take libjavamap.so from boom's ~/projects/scm232990_8.51dev/progs
+mdp() {
+  d /kiwi/progs
+  scp nzboom:~/projects/$1/progs/libjavamap.so .
 }
 
 # }}}
